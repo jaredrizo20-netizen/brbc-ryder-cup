@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BRBC · Ryder Cup 2026 — Redesign</title>
+<link rel="stylesheet" href="brbc.css" />
+<style>
+  /* Page background — design canvas surface */
+  body { background: #1a1a1a; margin: 0; }
+  /* Make iOS frame contents scrollable nicely */
+  .device-stage { overflow: hidden; }
+  .design-notes {
+    color: #f5f1e6;
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 320px;
+  }
+  .design-notes h4 {
+    font-family: "Playfair Display", serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: #d4a040;
+  }
+  .design-notes p { margin: 0 0 8px; opacity: 0.85; }
+  .design-notes ul { margin: 0; padding-left: 16px; opacity: 0.85; }
+  .design-notes li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Data (plain JS) -->
+<script src="data.js"></script>
+
+<!-- Starter components -->
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<!-- App -->
+<script type="text/babel" src="brbc-shared.jsx"></script>
+<script type="text/babel" src="brbc-screens.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "density": "default"
+}/*EDITMODE-END*/;
+
+// Wrap a screen in an iPhone frame, with a mounted-state hack so it scrolls
+function PhoneScreen({ children }) {
+  return (
+    <IOSDevice width={390} height={844}>
+      <div style={{ width: "100%", height: "100%", overflow: "hidden", background: "var(--paper, #F5F1E6)" }}>
+        {children}
+      </div>
+    </IOSDevice>
+  );
+}
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const density = tweaks.density;
+
+  return (
+    <>
+      <DesignCanvas
+        title="BRBC · Ryder Cup 2026"
+        subtitle="High-fidelity redesign — 6 screens, 3 scoreboard variations"
+      >
+        {/* ROW 1 — Scoreboard variants */}
+        <DCSection id="scoreboards" title="Scoreboard · Three Directions">
+          <DCArtboard id="sb-editorial" label="A · Editorial" width={390} height={844}>
+            <PhoneScreen><ScreenScoreboard density={density} variant="editorial" /></PhoneScreen>
+          </DCArtboard>
+          <DCArtboard id="sb-broadcast" label="B · Broadcast" width={390} height={844}>
+            <PhoneScreen><ScreenScoreboard density={density} variant="broadcast" /></PhoneScreen>
+          </DCArtboard>
+          <DCArtboard id="sb-data" label="C · Data-rich" width={390} height={844}>
+            <PhoneScreen><ScreenScoreboard density={density} variant="data" /></PhoneScreen>
+          </DCArtboard>
+        </DCSection>
+
+        {/* ROW 2 — Match screens */}
+        <DCSection id="match" title="Match Detail · Tee Sheet">
+          <DCArtboard id="match-detail" label="Match · Hole-by-Hole" width={390} height={844}>
+            <PhoneScreen><ScreenMatchDetail density={density} /></PhoneScreen>
+          </DCArtboard>
+        </DCSection>
+
+        {/* ROW 3 — Team + Rankings screens */}
+        <DCSection id="teams" title="Teams · Rankings · Player · History">
+          <DCArtboard id="teams-roster" label="Teams · Roster" width={390} height={844}>
+            <PhoneScreen><ScreenTeams density={density} /></PhoneScreen>
+          </DCArtboard>
+          <DCArtboard id="rankings" label="Player Rankings" width={390} height={844}>
+            <PhoneScreen><ScreenRankings density={density} /></PhoneScreen>
+          </DCArtboard>
+          <DCArtboard id="player" label="Player Profile" width={390} height={844}>
+            <PhoneScreen><ScreenPlayer density={density} /></PhoneScreen>
+          </DCArtboard>
+          <DCArtboard id="history" label="Hall of Champions" width={390} height={844}>
+            <PhoneScreen><ScreenHistory density={density} /></PhoneScreen>
+          </DCArtboard>
+        </DCSection>
+
+        {/* ROW 4 — Design system reference */}
+        <DCSection id="system" title="Design System · Notes">
+          <DCArtboard id="notes" label="What changed & why" width={780} height={520} background="#0E1320">
+            <div style={{ padding: 32, color: "#F5F1E6", fontFamily: "Inter, sans-serif", fontSize: 13, lineHeight: 1.55, height: "100%", overflow: "auto" }}>
+              <div style={{ fontFamily: "Playfair Display, serif", fontSize: 28, fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 4 }}>
+                A more grown-up BRBC
+              </div>
+              <div style={{ fontFamily: "Playfair Display, serif", fontStyle: "italic", color: "#d4a040", fontSize: 14, marginBottom: 18 }}>
+                What I changed and why
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+                <div>
+                  <div style={{ fontFamily: "Playfair Display, serif", fontSize: 14, fontWeight: 700, color: "#d4a040", marginBottom: 6 }}>Palette</div>
+                  <p style={{ opacity: 0.85, marginBottom: 8 }}>Switched from a dark/cream sports look to a country-club paper aesthetic. Refined navy & crimson at lower chroma so they read premium next to the gold.</p>
+                  <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+                    {[
+                      ["#F5F1E6", "Paper"],
+                      ["oklch(0.32 0.13 260)", "Rizo"],
+                      ["oklch(0.45 0.18 25)", "Brooks"],
+                      ["oklch(0.72 0.13 75)", "Gold"],
+                      ["#0E1320", "Ink"],
+                    ].map(([c, l]) => (
+                      <div key={l} style={{ flex: 1 }}>
+                        <div style={{ height: 36, background: c, borderRadius: 2 }}></div>
+                        <div style={{ fontSize: 9, opacity: 0.6, marginTop: 4, letterSpacing: "0.1em" }}>{l.toUpperCase()}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ fontFamily: "Playfair Display, serif", fontSize: 14, fontWeight: 700, color: "#d4a040", marginBottom: 6 }}>Typography</div>
+                  <p style={{ opacity: 0.85 }}>Playfair Display for tournament moments (numbers, names, banners), Inter for UI, JetBrains Mono for stats & "thru" notation. Tabular numerals everywhere scores live.</p>
+                </div>
+
+                <div>
+                  <div style={{ fontFamily: "Playfair Display, serif", fontSize: 14, fontWeight: 700, color: "#d4a040", marginBottom: 6 }}>Layout shifts</div>
+                  <ul style={{ paddingLeft: 16, opacity: 0.85, marginBottom: 12 }}>
+                    <li>Tri-color rule replaces the loose "blue / gold / red" line — a single 3-stop band at the top of every screen</li>
+                    <li>Crest treatment: edition number ("VIII") and est. year flank the wordmark like a masthead</li>
+                    <li>Cards lose the heavy bilateral colored borders — left-side accent only, indicating who leads</li>
+                    <li>F9 / B9 / 18 split now shows team + margin together (e.g. "R · 1 UP"), not buried color text</li>
+                    <li>Optional 18-dot hole strip at card foot for a glanceable trajectory</li>
+                  </ul>
+
+                  <div style={{ fontFamily: "Playfair Display, serif", fontSize: 14, fontWeight: 700, color: "#d4a040", marginBottom: 6 }}>Tweak</div>
+                  <p style={{ opacity: 0.85 }}>Toggle <strong>Tweaks</strong> in the toolbar to switch card density between compact / default / spacious — affects every screen.</p>
+                </div>
+              </div>
+            </div>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Density">
+          <TweakRadio
+            label="Card density"
+            value={density}
+            options={["compact", "default", "spacious"]}
+            onChange={(v) => setTweak("density", v)}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("app")).render(<App />);
+</script>
+
+</body>
+</html>
