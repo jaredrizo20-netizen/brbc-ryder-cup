@@ -3,6 +3,13 @@
 
 const { useMemo } = React;
 
+// ── Navigation context — current screen + navigate fn ──
+// Default { current: null } means "no provider" — BottomNav falls back to `active` prop.
+const NavCtx = React.createContext({ current: null, navigate: null });
+
+// ── Live holes context — Firebase hole data + setter ──
+const LiveCtx = React.createContext({ holes: {}, setHole: null });
+
 // ──────────────────────────────────────────────────
 // Crest / header
 // ──────────────────────────────────────────────────
@@ -112,7 +119,7 @@ function statusFromMargin(side, margin, played, max) {
   return { num: `${margin} UP`, label: side.toUpperCase(), side };
 }
 
-function MatchCard({ m, hideHoleStrip = false, hideSubPts = false }) {
+function MatchCard({ m, hideHoleStrip = false, hideSubPts = false, onClick }) {
   const lead = m.lead;
   const status = statusFromMargin(m.lead || "as", m.lead_amt || 0, m.thru || 0, 18);
   const cardClass = lead === "rizo" ? "lead-rizo" : lead === "brooks" ? "lead-brooks" : "";
@@ -128,7 +135,7 @@ function MatchCard({ m, hideHoleStrip = false, hideSubPts = false }) {
   const t = subVal(m.total);
 
   return (
-    <div className={`match-card ${cardClass}`}>
+    <div className={`match-card ${cardClass}`} onClick={onClick} style={onClick ? { cursor: 'pointer' } : undefined}>
       <div className="match-meta">
         <div className="match-meta-left">
           <span className="numerals">{m.time}</span>
@@ -206,6 +213,9 @@ function NavIcon({ name }) {
 }
 
 function BottomNav({ active = "scoreboard" }) {
+  const nav = React.useContext(NavCtx);
+  // Use context if a real provider is wrapping us, otherwise fall back to the `active` prop
+  const currentActive = nav.current !== null ? nav.current : active;
   const items = [
     { id: "scoreboard", label: "Scores" },
     { id: "matches",    label: "Matches" },
@@ -216,7 +226,12 @@ function BottomNav({ active = "scoreboard" }) {
   return (
     <div className="bottom-nav">
       {items.map(it => (
-        <div key={it.id} className={`nav-item ${active === it.id ? "active" : ""}`}>
+        <div
+          key={it.id}
+          className={`nav-item ${currentActive === it.id ? "active" : ""}`}
+          onClick={() => nav.navigate && nav.navigate(it.id)}
+          style={nav.navigate ? { cursor: 'pointer' } : undefined}
+        >
           <NavIcon name={it.id} />
           <span>{it.label}</span>
         </div>
@@ -227,6 +242,7 @@ function BottomNav({ active = "scoreboard" }) {
 
 // expose
 Object.assign(window, {
+  NavCtx, LiveCtx,
   BrbcHeader, LiveRibbon, SectionHead, Ornament,
   ScoreboardHero, MatchCard, BottomNav, NavIcon,
 });

@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<title>BRBC · Ryder Cup 2026</title>
+<link rel="stylesheet" href="brbc.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; background: #F5F1E6; }
+  #app { height: 100%; }
+  /* Safe area insets for notched phones */
+  .brbc {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<!-- Firebase compat (same version as existing app) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Data -->
+<script src="data.js"></script>
+
+<!-- Shared components -->
+<script type="text/babel" src="brbc-shared.jsx"></script>
+<script type="text/babel" src="brbc-screens.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect, useCallback, useRef } = React;
+
+// ─────────────────────────────────────────────────────────────
+// Score computation (ported from the existing app)
+// ─────────────────────────────────────────────────────────────
+
+// fbHoles: { '1': 'rizo' | 'brooks' | 'halved', ... }
+function clinchStatus(fbHoles, segment) {
+  const start = segment === "front" ? 1 : segment === "back" ? 10 : 1;
+  const end   = segment === "front" ? 9 : segment === "back" ? 18 : 18;
+  const total = end - start + 1;
+  let rizo = 0, brooks = 0, entered = 0;
+  for (let i = start; i <= end; i++) {
+    const v = fbHoles[i] || fbHoles[String(i)];
+    if (!v) break; // stop at first gap — sequential only
+    if (v === "rizo") rizo++;
+    else if (v === "brooks") brooks++;
+    entered++;
+    const remaining = total - entered;
+    const diff = rizo - brooks;
+    if (Math.abs(diff) > remaining) {
+      return { winner: diff > 0 ? "rizo" : "brooks", up: Math.abs(diff), remaining };
+    }
+  }
+  return null;
+}
+
+function calcMatchPts(fbHoles) {
+  let rF=0, bF=0, rB=0, bB=0, frontPlayed=0, backPlayed=0;
+  for (let i = 1; i <= 9; i++) {
+    const v = fbHoles[i] || fbHoles[String(i)];
+    if (!v) continue;
+    frontPlayed++;
+    if (v === "rizo") rF++;
+    else if (v === "brooks") bF++;
+  }
+  for (let i = 10; i <= 18; i++) {
+    const v = fbHoles[i] || fbHoles[String(i)];
+    if (!v) continue;
+    backPlayed++;
+    if (v === "rizo") rB++;
+    else if (v === "brooks") bB++;
+  }
+
+  const fClinched = clinchStatus(fbHoles, "front");
+  const bClinched = clinchStatus(fbHoles, "back");
+  const tClinched = clinchStatus(fbHoles, "total");
+
+  const front = frontPlayed === 9
+    ? (rF > bF ? {r:1,b:0} : bF > rF ? {r:0,b:1} : {r:0.5,b:0.5})
+    : fClinched ? (fClinched.winner === "rizo" ? {r:1,b:0} : {r:0,b:1})
+    : {r:0, b:0};
+
+  const back = backPlayed === 9
+    ? (rB > bB ? {r:1,b:0} : bB > rB ? {r:0,b:1} : {r:0.5,b:0.5})
+    : bClinched ? (bClinched.winner === "rizo" ? {r:1,b:0} : {r:0,b:1})
+    : {r:0, b:0};
+
+  const rT = rF + rB, bT = bF + bB;
+  const tPlayed = frontPlayed + backPlayed;
+  const total = (frontPlayed === 9 && backPlayed === 9)
+    ? (rT > bT ? {r:1,b:0} : bT > rT ? {r:0,b:1} : {r:0.5,b:0.5})
+    : tClinched ? (tClinched.winner === "rizo" ? {r:1,b:0} : {r:0,b:1})
+    : {r:0, b:0};
+
+  return { front, back, total, rF, bF, rB, bB, rT, bT, frontPlayed, backPlayed, tPlayed };
+}
+
+function calcProjectedPts(fbHoles) {
+  const pts = calcMatchPts(fbHoles);
+  const { frontPlayed, backPlayed, rF, bF, rB, bB, rT, bT } = pts;
+
+  const fProj = frontPlayed === 9 ? pts.front
+    : frontPlayed === 0 ? {r:0.5, b:0.5}
+    : rF > bF ? {r:1,b:0} : bF > rF ? {r:0,b:1} : {r:0.5,b:0.5};
+
+  const bProj = backPlayed === 9 ? pts.back
+    : backPlayed === 0 ? {r:0.5, b:0.5}
+    : rB > bB ? {r:1,b:0} : bB > rB ? {r:0,b:1} : {r:0.5,b:0.5};
+
+  const tProj = (frontPlayed === 9 && backPlayed === 9) ? pts.total
+    : (frontPlayed === 0 && backPlayed === 0) ? {r:0.5, b:0.5}
+    : rT > bT ? {r:1,b:0} : bT > rT ? {r:0,b:1} : {r:0.5,b:0.5};
+
+  return { r: fProj.r + bProj.r + tProj.r, b: fProj.b + bProj.b + tProj.b };
+}
+
+// Derive a fully populated match object from Firebase holes + static match definition
+function deriveMatch(staticMatch, fbHoles) {
+  const holes = fbHoles || {};
+  const pts = calcMatchPts(holes);
+  const { rF, bF, rB, bB, rT, bT, frontPlayed, backPlayed, tPlayed } = pts;
+
+  // Thru = highest sequential hole played
+  let thru = 0;
+  for (let i = 18; i >= 1; i--) {
+    if (holes[i] || holes[String(i)]) { thru = i; break; }
+  }
+
+  const status = thru >= 18 ? "complete" : thru > 0 ? "live" : "upcoming";
+
+  // Front 9 sub-result
+  const fClinched = clinchStatus(holes, "front");
+  let frontWinner = null, frontMargin = 0;
+  if (frontPlayed === 9 || fClinched) {
+    const w = fClinched ? fClinched.winner : (rF > bF ? "rizo" : bF > rF ? "brooks" : "halved");
+    frontWinner = w;
+    frontMargin = w === "halved" ? 0 : Math.abs(rF - bF);
+  }
+
+  // Back 9 sub-result
+  const bClinched = clinchStatus(holes, "back");
+  let backWinner = null, backMargin = 0;
+  if (backPlayed === 9 || bClinched) {
+    const w = bClinched ? bClinched.winner : (rB > bB ? "rizo" : bB > rB ? "brooks" : "halved");
+    backWinner = w;
+    backMargin = w === "halved" ? 0 : Math.abs(rB - bB);
+  }
+
+  // Total
+  const tClinched = clinchStatus(holes, "total");
+  let totalWinner = null, totalMargin = 0;
+  if ((frontPlayed === 9 && backPlayed === 9) || tClinched) {
+    const w = tClinched ? tClinched.winner : (rT > bT ? "rizo" : bT > rT ? "brooks" : "halved");
+    totalWinner = w;
+    totalMargin = w === "halved" ? 0 : Math.abs(rT - bT);
+  }
+
+  // Overall match lead
+  const lead = rT > bT ? "rizo" : bT > rT ? "brooks" : null;
+  const lead_amt = Math.abs(rT - bT);
+
+  // Build holes array using par/dist from static match data
+  const holeMeta = {};
+  (staticMatch.holes || []).forEach(h => { holeMeta[h.n] = { par: h.par, dist: h.dist }; });
+
+  const holesArr = [];
+  for (let i = 1; i <= thru; i++) {
+    const v = holes[i] || holes[String(i)];
+    if (!v) continue;
+    const meta = holeMeta[i] || { par: 4, dist: 400 };
+    holesArr.push({ n: i, par: meta.par, dist: meta.dist,
+      win: v === "rizo" ? 1 : v === "brooks" ? -1 : 0 });
+  }
+
+  return {
+    ...staticMatch,
+    thru,
+    status,
+    lead,
+    lead_amt,
+    front:  { winner: frontWinner,  margin: frontMargin,  in_progress: frontPlayed < 9 },
+    back:   { winner: backWinner,   margin: backMargin,   in_progress: backPlayed < 9 },
+    total:  { winner: totalWinner,  margin: totalMargin,  in_progress: tPlayed < 18 },
+    holes: holesArr,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────
+// App
+// ─────────────────────────────────────────────────────────────
+// Keep original static match definitions for par/dist metadata
+const STATIC_MATCHES = JSON.parse(JSON.stringify(window.BRBC_DATA.matches));
+
+function App() {
+  const [screen, setScreen]            = useState("scoreboard");
+  const [selectedMatchId, setSelected] = useState(null);
+  // Firebase hole data: { [matchId]: { [holeNum]: 'rizo'|'brooks'|'halved' } }
+  const [fbHolesData, setFbHolesData]  = useState({});
+  // True after Firebase has sent its first snapshot (even if empty)
+  const [fbReady, setFbReady] = useState(false);
+  const dbRef = useRef(null);
+
+  // Expose match selection to scoreboard (accessed via window to avoid prop-drilling)
+  useEffect(() => {
+    window.BRBC_SELECT_MATCH = (id) => setSelected(id);
+    return () => { delete window.BRBC_SELECT_MATCH; };
+  }, []);
+
+  // Firebase: subscribe to match holes
+  useEffect(() => {
+    let db;
+    try {
+      const firebaseConfig = {
+        apiKey: "AIzaSyA2c-gnxJtFynfZJghMS31uYDrT4SLfKdA",
+        authDomain: "brbc-ryder-cup.firebaseapp.com",
+        databaseURL: "https://brbc-ryder-cup-default-rtdb.firebaseio.com",
+        projectId: "brbc-ryder-cup",
+        storageBucket: "brbc-ryder-cup.firebasestorage.app",
+        messagingSenderId: "822325966523",
+        appId: "1:822325966523:web:8e030bd543c00b685ddb9e",
+      };
+      const app = firebase.apps.length
+        ? firebase.apps[0]
+        : firebase.initializeApp(firebaseConfig);
+      db = firebase.database(app);
+      dbRef.current = db;
+    } catch (err) {
+      console.warn("Firebase unavailable — using static data:", err);
+      return;
+    }
+
+    const matchesRef = db.ref("matches");
+    const handler = matchesRef.on("value", (snap) => {
+      const raw = snap.val() || {};
+      const holesMap = {};
+      STATIC_MATCHES.forEach(m => { holesMap[m.id] = raw[m.id]?.holes || {}; });
+      setFbReady(true);
+      setFbHolesData(holesMap);
+    });
+    return () => matchesRef.off("value", handler);
+  }, []);
+
+  // ── Derive match data synchronously during render so all children see fresh values ──
+  // Always compute (for memoisation), but only write to BRBC_DATA after Firebase connects.
+  // Before fbReady the static mock data in data.js stays intact.
+  const D = window.BRBC_DATA;
+
+  const derivedMatches = React.useMemo(
+    () => STATIC_MATCHES.map(m => deriveMatch(m, fbHolesData[m.id] || {})),
+    [fbHolesData]
+  );
+
+  if (fbReady) {
+    D.matches = derivedMatches;
+
+    let rizoScore = 0, brooksScore = 0, rizoProj = 0, brooksProj = 0;
+    STATIC_MATCHES.forEach(m => {
+      const fbH = fbHolesData[m.id] || {};
+      const pts  = calcMatchPts(fbH);
+      rizoScore   += pts.front.r + pts.back.r + pts.total.r;
+      brooksScore += pts.front.b + pts.back.b + pts.total.b;
+      const proj   = calcProjectedPts(fbH);
+      rizoProj   += proj.r;
+      brooksProj += proj.b;
+    });
+    D.team_rizo.score       = rizoScore;
+    D.team_brooks.score     = brooksScore;
+    D.team_rizo.projected   = parseFloat(rizoProj.toFixed(1));
+    D.team_brooks.projected = parseFloat(brooksProj.toFixed(1));
+  }
+
+  // Write a single hole result to Firebase
+  const setHole = useCallback((matchId, holeNum, result) => {
+    if (!dbRef.current) {
+      // Offline fallback: update local state only
+      setFbHolesData(prev => {
+        const matchHoles = { ...(prev[matchId] || {}) };
+        if (result === null) {
+          delete matchHoles[holeNum];
+        } else {
+          matchHoles[holeNum] = result;
+        }
+        return { ...prev, [matchId]: matchHoles };
+      });
+      return;
+    }
+    const path = `matches/${matchId}/holes/${holeNum}`;
+    if (result === null) {
+      dbRef.current.ref(path).remove();
+    } else {
+      dbRef.current.ref(path).set(result);
+    }
+    dbRef.current.ref(`matches/${matchId}/lastUpdated`).set(Date.now());
+  }, []);
+
+  // Resolve the match to show in detail view
+  const activeMatchId = selectedMatchId
+    || (window.BRBC_DATA.matches.find(m => m.status === "live") || window.BRBC_DATA.matches[0]).id;
+
+  return (
+    <NavCtx.Provider value={{ current: screen, navigate: setScreen }}>
+      <LiveCtx.Provider value={{ holes: fbHolesData, setHole }}>
+        {screen === "scoreboard" && <ScreenScoreboard />}
+        {screen === "matches"    && <ScreenMatchDetail key={activeMatchId} matchId={activeMatchId} />}
+        {screen === "teams"      && <ScreenTeams />}
+        {screen === "rankings"   && <ScreenRankings />}
+        {screen === "history"    && <ScreenHistory />}
+      </LiveCtx.Provider>
+    </NavCtx.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("app")).render(<App />);
+</script>
+
+</body>
+</html>

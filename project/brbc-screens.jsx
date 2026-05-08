@@ -6,32 +6,53 @@
 // ──────────────────────────────────────────────────
 function ScreenScoreboard({ density = "default", variant = "data" }) {
   const D = window.BRBC_DATA;
+  const nav = React.useContext(NavCtx);
   const live = D.matches.filter(m => m.status === "live");
   const upcoming = D.matches.filter(m => m.status === "upcoming");
+  const complete = D.matches.filter(m => m.status === "complete");
+
+  const goToMatch = nav.navigate ? (id) => {
+    if (window.BRBC_SELECT_MATCH) window.BRBC_SELECT_MATCH(id);
+    nav.navigate("matches");
+  } : null;
 
   return (
     <div className="brbc" data-density={density}>
       <BrbcHeader title="Scoreboard" />
       <ScoreboardHero target={12.5} max={25} />
 
-      <SectionHead>Live Matches</SectionHead>
-      <div className="match-list">
-        {live.map(m => (
-          <MatchCard key={m.id} m={m} />
-        ))}
-      </div>
+      {live.length > 0 && <>
+        <SectionHead>Live Matches</SectionHead>
+        <div className="match-list">
+          {live.map(m => (
+            <MatchCard key={m.id} m={m} onClick={goToMatch ? () => goToMatch(m.id) : undefined} />
+          ))}
+        </div>
+      </>}
 
-      {upcoming.length ? (
+      {upcoming.length > 0 && (
         <>
           <Ornament text="◆ ◆ ◆" />
           <SectionHead>Upcoming</SectionHead>
           <div className="match-list" style={{ paddingBottom: 16 }}>
             {upcoming.map(m => (
-              <MatchCard key={m.id} m={m} hideHoleStrip hideSubPts />
+              <MatchCard key={m.id} m={m} hideHoleStrip hideSubPts onClick={goToMatch ? () => goToMatch(m.id) : undefined} />
             ))}
           </div>
         </>
-      ) : null}
+      )}
+
+      {complete.length > 0 && (
+        <>
+          <Ornament text="◆ ◆ ◆" />
+          <SectionHead>Completed</SectionHead>
+          <div className="match-list" style={{ paddingBottom: 16 }}>
+            {complete.map(m => (
+              <MatchCard key={m.id} m={m} hideHoleStrip onClick={goToMatch ? () => goToMatch(m.id) : undefined} />
+            ))}
+          </div>
+        </>
+      )}
 
       <Ornament text="★    FIRST TO 12.5 POINTS WINS THE CUP    ★" />
       <BottomNav active="scoreboard" />
@@ -42,24 +63,49 @@ function ScreenScoreboard({ density = "default", variant = "data" }) {
 // ──────────────────────────────────────────────────
 // SCREEN B — Match Detail (hole-by-hole)
 // ──────────────────────────────────────────────────
-function ScreenMatchDetail({ density = "default" }) {
+function ScreenMatchDetail({ density = "default", matchId: matchIdProp }) {
   const D = window.BRBC_DATA;
-  const m = D.matches[0];
+  const live = React.useContext(LiveCtx);
 
-  // Initial hole state from data: hole# -> 'r' | 'b' | 'h' | null
-  const initial = React.useMemo(() => {
+  // Resolve which match to show — from prop, else first live match, else first match
+  const resolvedId = matchIdProp
+    || (D.matches.find(m => m.status === "live") || D.matches[0]).id;
+  const m = D.matches.find(m => m.id === resolvedId) || D.matches[0];
+
+  // Build initial local hole map from LiveCtx (Firebase) or fall back to static data
+  const buildHolesFromLive = React.useCallback((liveData) => {
     const map = {};
     for (let i = 1; i <= 18; i++) map[i] = null;
-    (m.holes || []).forEach(h => {
-      map[h.n] = h.win === 1 ? 'r' : h.win === -1 ? 'b' : h.win === 0 ? 'h' : null;
-    });
+    if (liveData && Object.keys(liveData).length > 0) {
+      Object.entries(liveData).forEach(([n, result]) => {
+        const k = parseInt(n);
+        map[k] = result === 'rizo' ? 'r' : result === 'brooks' ? 'b' : result === 'halved' ? 'h' : null;
+      });
+    } else {
+      (m.holes || []).forEach(h => {
+        map[h.n] = h.win === 1 ? 'r' : h.win === -1 ? 'b' : h.win === 0 ? 'h' : null;
+      });
+    }
     return map;
   }, [m.id]);
 
-  const [holes, setHoles] = React.useState(initial);
+  const [holes, setHoles] = React.useState(() => buildHolesFromLive(live.holes[m.id]));
+
+  // Sync when Firebase data arrives or match changes
+  React.useEffect(() => {
+    setHoles(buildHolesFromLive(live.holes[m.id]));
+  }, [live.holes[m.id], m.id]);
 
   const setHole = (n, v) => {
-    setHoles(prev => ({ ...prev, [n]: prev[n] === v ? null : v }));
+    setHoles(prev => {
+      const newVal = { ...prev, [n]: prev[n] === v ? null : v };
+      // Write to Firebase via context
+      if (live.setHole) {
+        const fbResult = newVal[n] === 'r' ? 'rizo' : newVal[n] === 'b' ? 'brooks' : newVal[n] === 'h' ? 'halved' : null;
+        live.setHole(m.id, n, fbResult);
+      }
+      return newVal;
+    });
   };
 
   // ── derive standings from holes map ──
@@ -113,8 +159,10 @@ function ScreenMatchDetail({ density = "default" }) {
 
   return (
     <div className="brbc" data-density={density}>
-      <BrbcHeader title="Match 1" />
-      <div className="venue-strip">THRU {thru}</div>
+      <BrbcHeader title={`Match ${D.matches.findIndex(x => x.id === m.id) + 1}`} />
+      <div className="venue-strip">
+        {thru === 0 ? 'NOT STARTED' : thru >= 18 ? 'FINAL' : `THRU ${thru}`}
+      </div>
 
       <div className="score-banner" style={{ paddingBottom: 10, alignItems: 'start' }}>
         <div className="team-block left">
