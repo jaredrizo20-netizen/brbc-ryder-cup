@@ -127,8 +127,9 @@ function MatchCard({ m, hideHoleStrip = false, hideSubPts = false, onClick }) {
   const subVal = (seg) => {
     if (!seg || !seg.winner) return { txt: "\u2014", cls: "pending" };
     if (seg.winner === "halved") return { txt: "AS", cls: "as" };
-    if (seg.winner === "rizo") return { txt: `${seg.margin} UP`, cls: "rizo" };
-    return { txt: `${seg.margin} UP`, cls: "brooks" };
+    const cls = seg.winner === "rizo" ? "rizo" : "brooks";
+    const txt = seg.remaining > 0 ? `${seg.margin}&${seg.remaining}` : `${seg.margin} UP`;
+    return { txt, cls };
   };
   const f = subVal(m.front);
   const ba = subVal(m.back);

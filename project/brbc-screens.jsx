@@ -118,10 +118,34 @@ function ScreenMatchDetail({ density = "default", matchId: matchIdProp }) {
     }
     return { r, b, played };
   };
-  const segLabel = (s, total) => {
+  // Detect clinch in local hole state \u2014 stops at first gap (sequential only)
+  const clinchLocal = (lo, hi) => {
+    const span = hi - lo + 1;
+    let r = 0, b = 0, entered = 0;
+    for (let i = lo; i <= hi; i++) {
+      const v = holes[i];
+      if (!v) break;
+      if (v === 'r') r++; else if (v === 'b') b++;
+      entered++;
+      const remaining = span - entered;
+      const diff = r - b;
+      if (Math.abs(diff) > remaining) {
+        return { winner: diff > 0 ? 'r' : 'b', up: Math.abs(diff), remaining };
+      }
+    }
+    return null;
+  };
+
+  const segLabel = (s, lo, hi) => {
+    const holeCount = hi - lo + 1;
     const diff = s.r - s.b;
     if (s.played === 0) return { txt: '\u2014', cls: 'as' };
-    if (diff === 0 && s.played === total) return { txt: 'AS', cls: 'as' };
+    const clinched = clinchLocal(lo, hi);
+    if (clinched) {
+      const cls = clinched.winner === 'r' ? 'rizo' : 'brooks';
+      return { txt: `${clinched.up}&${clinched.remaining}`, cls };
+    }
+    if (diff === 0 && s.played === holeCount) return { txt: 'AS', cls: 'as' };
     if (diff === 0) return { txt: 'AS', cls: 'as' };
     return { txt: `${Math.abs(diff)} UP`, cls: diff > 0 ? 'rizo' : 'brooks' };
   };
@@ -129,14 +153,17 @@ function ScreenMatchDetail({ density = "default", matchId: matchIdProp }) {
   const front = segScore(1, 9);
   const back = segScore(10, 18);
   const total = { r: front.r + back.r, b: front.b + back.b, played: front.played + back.played };
-  const fLabel = segLabel(front, 9);
-  const bLabel = segLabel(back, 9);
-  const tLabel = segLabel(total, 18);
+  const fLabel = segLabel(front, 1, 9);
+  const bLabel = segLabel(back, 10, 18);
+  const tLabel = segLabel(total, 1, 18);
   const thru = total.played;
   const overallDiff = total.r - total.b;
 
-  const heroSide = overallDiff > 0 ? 'rizo' : overallDiff < 0 ? 'brooks' : 'as';
-  const heroNum = overallDiff === 0 ? (thru === 0 ? '\u2014' : 'AS') : `${Math.abs(overallDiff)}`;
+  const totalClinch = clinchLocal(1, 18);
+  const heroSide = totalClinch ? (totalClinch.winner === 'r' ? 'rizo' : 'brooks')
+    : overallDiff > 0 ? 'rizo' : overallDiff < 0 ? 'brooks' : 'as';
+  const heroNum = totalClinch ? `${totalClinch.up}&${totalClinch.remaining}`
+    : overallDiff === 0 ? (thru === 0 ? '\u2014' : 'AS') : `${Math.abs(overallDiff)}`;
 
   const HOLE_DATA = (m.holes || []);
   const holeMeta = (n) => HOLE_DATA.find(h => h.n === n) || { par: 4, dist: 400 };
