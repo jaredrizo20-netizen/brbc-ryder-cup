@@ -254,7 +254,7 @@ function ScreenTeams({ density = "default" }) {
   return (
     <div className="brbc" data-density={density}>
       <BrbcHeader title="Teams" />
-      <LiveRibbon>20 PLAYERS · 2 CAPTAINS · 1 CUP</LiveRibbon>
+      <LiveRibbon>32 PLAYERS · 2 CAPTAINS · 1 CUP</LiveRibbon>
 
       {/* Versus banner */}
       <div className="score-banner" style={{ paddingBottom: 8, alignItems: "center" }}>
@@ -275,7 +275,7 @@ function ScreenTeams({ density = "default" }) {
 
       <SectionHead accent="navy">Team Rizo</SectionHead>
       <div>
-        {D.team_rizo.roster.slice(0, 5).map(p => (
+        {D.team_rizo.roster.map(p => (
           <div className="roster-row" key={p.name}>
             <div className="avatar rizo">{initials(p.name)}</div>
             <div>
@@ -293,7 +293,7 @@ function ScreenTeams({ density = "default" }) {
 
       <SectionHead accent="crimson">Team Brooks</SectionHead>
       <div>
-        {D.team_brooks.roster.slice(0, 5).map(p => (
+        {D.team_brooks.roster.map(p => (
           <div className="roster-row" key={p.name}>
             <div className="avatar brooks">{initials(p.name)}</div>
             <div>
