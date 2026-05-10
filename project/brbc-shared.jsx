@@ -3,6 +3,13 @@
 
 const { useMemo } = React;
 
+// Renders a score like "5&4" with the & in a plain sans-serif font
+function Score({ v }) {
+  if (!v || !v.includes('&')) return <>{v}</>;
+  const [lo, hi] = v.split('&');
+  return <>{lo}<span style={{ fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 400 }}>{"&"}</span>{hi}</>;
+}
+
 // ── Navigation context — current screen + navigate fn ──
 // Default { current: null } means "no provider" — BottomNav falls back to `active` prop.
 const NavCtx = React.createContext({ current: null, navigate: null });
@@ -125,11 +132,11 @@ function MatchCard({ m, hideHoleStrip = false, hideSubPts = false, onClick }) {
   const cardClass = lead === "rizo" ? "lead-rizo" : lead === "brooks" ? "lead-brooks" : "";
 
   const subVal = (seg) => {
-    if (!seg || !seg.winner) return { txt: "\u2014", cls: "pending" };
-    if (seg.winner === "halved") return { txt: "AS", cls: "as" };
+    if (!seg || !seg.winner) return { txt: "\u2014", cls: "pending", final: false };
+    if (seg.winner === "halved") return { txt: "AS", cls: "as", final: true };
     const cls = seg.winner === "rizo" ? "rizo" : "brooks";
     const txt = seg.remaining > 0 ? `${seg.margin}&${seg.remaining}` : `${seg.margin} UP`;
-    return { txt, cls };
+    return { txt, cls, final: true };
   };
   const f = subVal(m.front);
   const ba = subVal(m.back);
@@ -168,15 +175,18 @@ function MatchCard({ m, hideHoleStrip = false, hideSubPts = false, onClick }) {
         <div className="sub-pts">
           <div className="sub-pt">
             <div className="sub-label">Front 9</div>
-            <div className={`sub-val ${f.cls}`}>{f.txt}</div>
+            <div className={`sub-val ${f.cls}`}><Score v={f.txt} /></div>
+            {f.final && <div style={{ fontSize: 8, fontFamily: 'var(--sans)', letterSpacing: '0.12em', color: 'var(--gold-2)', textAlign: 'center', marginTop: 2, fontWeight: 600 }}>FINAL</div>}
           </div>
           <div className="sub-pt">
             <div className="sub-label">Back 9</div>
-            <div className={`sub-val ${ba.cls}`}>{ba.txt}</div>
+            <div className={`sub-val ${ba.cls}`}><Score v={ba.txt} /></div>
+            {ba.final && <div style={{ fontSize: 8, fontFamily: 'var(--sans)', letterSpacing: '0.12em', color: 'var(--gold-2)', textAlign: 'center', marginTop: 2, fontWeight: 600 }}>FINAL</div>}
           </div>
           <div className="sub-pt">
             <div className="sub-label">18 Holes</div>
-            <div className={`sub-val ${t.cls}`}>{t.txt}</div>
+            <div className={`sub-val ${t.cls}`}><Score v={t.txt} /></div>
+            {t.final && <div style={{ fontSize: 8, fontFamily: 'var(--sans)', letterSpacing: '0.12em', color: 'var(--gold-2)', textAlign: 'center', marginTop: 2, fontWeight: 600 }}>FINAL</div>}
           </div>
         </div>
       ) : null}
@@ -244,6 +254,7 @@ function BottomNav({ active = "scoreboard" }) {
 // expose
 Object.assign(window, {
   NavCtx, LiveCtx,
+  Score,
   BrbcHeader, LiveRibbon, SectionHead, Ornament,
   ScoreboardHero, MatchCard, BottomNav, NavIcon,
 });

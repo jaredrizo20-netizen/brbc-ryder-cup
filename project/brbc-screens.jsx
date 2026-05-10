@@ -139,15 +139,17 @@ function ScreenMatchDetail({ density = "default", matchId: matchIdProp }) {
   const segLabel = (s, lo, hi) => {
     const holeCount = hi - lo + 1;
     const diff = s.r - s.b;
-    if (s.played === 0) return { txt: '\u2014', cls: 'as' };
+    if (s.played === 0) return { txt: '\u2014', cls: 'as', final: false };
     const clinched = clinchLocal(lo, hi);
     if (clinched) {
       const cls = clinched.winner === 'r' ? 'rizo' : 'brooks';
-      return { txt: `${clinched.up}&${clinched.remaining}`, cls };
+      // remaining===0 means won on the last hole \u2014 show "X UP" not "X&0"
+      const txt = clinched.remaining > 0 ? `${clinched.up}&${clinched.remaining}` : `${clinched.up} UP`;
+      return { txt, cls, final: true };
     }
-    if (diff === 0 && s.played === holeCount) return { txt: 'AS', cls: 'as' };
-    if (diff === 0) return { txt: 'AS', cls: 'as' };
-    return { txt: `${Math.abs(diff)} UP`, cls: diff > 0 ? 'rizo' : 'brooks' };
+    if (diff === 0 && s.played === holeCount) return { txt: 'AS', cls: 'as', final: true };
+    if (diff === 0) return { txt: 'AS', cls: 'as', final: false };
+    return { txt: `${Math.abs(diff)} UP`, cls: diff > 0 ? 'rizo' : 'brooks', final: s.played === holeCount };
   };
 
   const front = segScore(1, 9);
@@ -199,7 +201,7 @@ function ScreenMatchDetail({ density = "default", matchId: matchIdProp }) {
           ))}
         </div>
         <div className="score-target" style={{ paddingTop: 6 }}>
-          <div className={`status-num ${heroSide}`} style={{ fontFamily: 'var(--serif)', fontSize: 44, fontWeight: 700, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{heroNum}</div>
+          <div className={`status-num ${heroSide}`} style={{ fontFamily: 'var(--serif)', fontSize: 44, fontWeight: 700, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}><Score v={heroNum} /></div>
           <div className="target-label" style={{ marginTop: 2 }}>{heroNum === 'AS' || heroNum === '\u2014' ? 'ALL SQUARE' : 'UP'}</div>
         </div>
         <div className="team-block right">
@@ -211,9 +213,21 @@ function ScreenMatchDetail({ density = "default", matchId: matchIdProp }) {
       </div>
 
       <div className="sub-pts" style={{ margin: '0 16px', border: '1px solid var(--rule)', borderRadius: 4 }}>
-        <div className="sub-pt"><div className="sub-label">Front 9</div><div className={`sub-val ${fLabel.cls}`}>{fLabel.txt}</div></div>
-        <div className="sub-pt"><div className="sub-label">Back 9</div><div className={`sub-val ${bLabel.cls}`}>{bLabel.txt}</div></div>
-        <div className="sub-pt"><div className="sub-label">Total</div><div className={`sub-val ${tLabel.cls}`}>{tLabel.txt}</div></div>
+        <div className="sub-pt">
+          <div className="sub-label">Front 9</div>
+          <div className={`sub-val ${fLabel.cls}`}><Score v={fLabel.txt} /></div>
+          {fLabel.final && <div style={{ fontSize: 8, fontFamily: 'var(--sans)', letterSpacing: '0.12em', color: 'var(--gold-2)', textAlign: 'center', marginTop: 2, fontWeight: 600 }}>FINAL</div>}
+        </div>
+        <div className="sub-pt">
+          <div className="sub-label">Back 9</div>
+          <div className={`sub-val ${bLabel.cls}`}><Score v={bLabel.txt} /></div>
+          {bLabel.final && <div style={{ fontSize: 8, fontFamily: 'var(--sans)', letterSpacing: '0.12em', color: 'var(--gold-2)', textAlign: 'center', marginTop: 2, fontWeight: 600 }}>FINAL</div>}
+        </div>
+        <div className="sub-pt">
+          <div className="sub-label">Total</div>
+          <div className={`sub-val ${tLabel.cls}`}><Score v={tLabel.txt} /></div>
+          {tLabel.final && <div style={{ fontSize: 8, fontFamily: 'var(--sans)', letterSpacing: '0.12em', color: 'var(--gold-2)', textAlign: 'center', marginTop: 2, fontWeight: 600 }}>FINAL</div>}
+        </div>
       </div>
 
       <SectionHead accent="hole-by-hole">Card</SectionHead>
