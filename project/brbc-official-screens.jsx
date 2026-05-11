@@ -201,7 +201,7 @@ function BRBCFooter() {
   return (
     <div style={{ textAlign:"center", padding:"24px 16px 32px", borderTop:`1px solid ${OT.rule}` }}>
       <img
-        src="assets/brbc-footer-logo.png"
+        src="assets/brbc-footer-logo.png?v=2"
         alt="Brooks Rizo Booze Classic"
         style={{ maxWidth:"100%", width:200, height:"auto", display:"block", margin:"0 auto" }}
       />
