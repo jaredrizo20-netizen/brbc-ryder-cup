@@ -70,17 +70,12 @@ function OHeader() {
         <div style={{ background:"#C9A84C" }}></div>
         <div style={{ background:OT.brooksLight }}></div>
       </div>
-      <div style={{ padding:"18px 0 14px", textAlign:"center" }}>
+      <div style={{ padding:"18px 0 18px", textAlign:"center" }}>
         <img
           src="assets/brbc-logo-new.png"
           alt="BRBC Ryder Cup"
           style={{ maxHeight:150, maxWidth:"100%", width:"auto", height:"auto", display:"block", margin:"0 auto" }}
         />
-      </div>
-      <div style={{ display:"flex", alignItems:"center", gap:10, padding:"0 16px 14px" }}>
-        <div style={{ flex:1, height:1, background:`linear-gradient(90deg,transparent,${OT.ruleStrong})` }}></div>
-        <span style={{ fontFamily:OT.serif, fontSize:13, fontWeight:700, letterSpacing:"0.18em", textTransform:"uppercase", color:OT.rizoLight }}>Ryder Cup 2026</span>
-        <div style={{ flex:1, height:1, background:`linear-gradient(90deg,${OT.ruleStrong},transparent)` }}></div>
       </div>
     </div>
   );
