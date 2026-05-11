@@ -44,7 +44,7 @@
 // LiveCtx must be defined before the screens script loads, so define it here.
 window.LiveCtx = React.createContext({ holes: {}, setHole: null });
 </script>
-<script type="text/babel" src="brbc-official-screens.jsx?v=6"></script>
+<script type="text/babel" src="brbc-official-screens.jsx?v=7"></script>
 
 <script type="text/babel" data-presets="env,react">
 const { useState, useEffect, useCallback, useRef, useMemo } = React;
@@ -345,6 +345,7 @@ function App() {
         {screen === "teams"        && <OScreenTeams D={D} />}
         {screen === "rankings"     && <OScreenRankings D={D} />}
         {screen === "history"      && <OScreenHistory D={D} />}
+        {screen === "rules"        && <OScreenRules />}
       </div>
     </window.LiveCtx.Provider>
   );

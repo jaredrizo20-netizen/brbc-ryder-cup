@@ -98,17 +98,17 @@ function OSectionHead({ children }) {
 
 function ONav({ active, onNav }) {
   const items = [
-    { id:"scoreboard", label:"Scores",   icon:<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M3 4h18v14H3z"/><path d="M7 8h4M7 12h4M14 8h3M14 12h3"/></svg> },
-    { id:"teams",      label:"Teams",    icon:<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="11" r="2.5"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M14 19c0-2 2-3.5 4-3.5"/></svg> },
-    { id:"rankings",   label:"Rankings", icon:<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M3 20h4v-6H3zM10 20h4V8h-4zM17 20h4V4h-4z"/></svg> },
-    { id:"history",    label:"History",  icon:<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M7 4h10v6a5 5 0 0 1-10 0z"/><path d="M9 20h6M12 15v5"/></svg> },
+    { id:"scoreboard", label:"Leaderboard" },
+    { id:"teams",      label:"Teams"       },
+    { id:"rankings",   label:"Rankings"    },
+    { id:"history",    label:"History"     },
+    { id:"rules",      label:"Rules"       },
   ];
   return (
     <div style={{ display:"grid", gridTemplateColumns:`repeat(${items.length},1fr)`, background:OT.bg, borderBottom:`1px solid ${OT.rule}`, paddingTop:"env(safe-area-inset-top,0px)" }}>
       {items.map(it => (
-        <button key={it.id} onClick={() => onNav(it.id)} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:3, padding:"10px 0 10px", background:"none", border:"none", cursor:"pointer", color: active===it.id ? OT.rizoLight : OT.faint, position:"relative" }}>
+        <button key={it.id} onClick={() => onNav(it.id)} style={{ padding:"11px 0", background:"none", border:"none", cursor:"pointer", color: active===it.id ? OT.rizoLight : OT.faint, position:"relative" }}>
           {active===it.id && <div style={{ position:"absolute", bottom:0, left:"50%", transform:"translateX(-50%)", width:24, height:2, background:OT.rizoLight }}></div>}
-          {it.icon}
           <span style={{ fontFamily:OT.sans, fontSize:9, fontWeight: active===it.id ? 700 : 500, letterSpacing:"0.12em", textTransform:"uppercase" }}>{it.label}</span>
         </button>
       ))}
@@ -577,8 +577,39 @@ function OScreenHistory({ D }) {
   );
 }
 
+function OScreenRules() {
+  const rules = [
+    { title:"Match Play Format", body:"All matches are played in match play format. Each hole is won, lost, or halved. The player or team that wins the most holes wins the match." },
+    { title:"Scoring", body:"Each match is worth up to 3 points — 1 for the front 9, 1 for the back 9, and 1 for the overall 18-hole result. The first team to 12.5 points wins the Cup." },
+    { title:"Handicaps", body:"Handicap strokes are applied on a per-hole basis using the course's stroke index. The lower-handicap player in each pair plays at scratch; the higher-handicap player receives the difference." },
+    { title:"Alternate Shot (Foursomes)", body:"Partners alternate hitting the same ball. One partner tees off on odd holes, the other on even holes. A missed stroke still counts and the partner plays the next shot." },
+    { title:"Concessions", body:"Putts, holes, or matches may be conceded at any time. A conceded putt cannot be refused. Conceded strokes count in the score but are not holed out." },
+    { title:"Pace of Play", body:"Groups are expected to maintain a ready-golf pace. A group falling more than one hole behind the group ahead may be placed on the clock by tournament officials." },
+    { title:"Out of Bounds & Lost Ball", body:"Standard USGA rules apply. A ball that is out of bounds or lost (not found within 3 minutes) incurs a stroke-and-distance penalty." },
+    { title:"Unplayable Lie", body:"A player may declare their ball unplayable anywhere on the course (except in a penalty area). The player takes a one-stroke penalty and chooses from three relief options." },
+    { title:"Disputes & Rulings", body:"Any dispute should be raised immediately. Play a second ball if possible. Tournament officials have final authority on all rulings. Good sportsmanship is expected at all times." },
+    { title:"Spirit of the Game", body:"The BRBC Ryder Cup is a competition among friends. Respect your fellow competitors, the course, and the spirit of the game. May the best team win." },
+  ];
+  return (
+    <div style={{ flex:1, overflowY:"auto" }}>
+      <div style={{ padding:"20px 16px 8px" }}>
+        <div style={{ fontFamily:OT.serif, fontSize:22, fontWeight:700, letterSpacing:"0.04em", color:OT.ink, marginBottom:4 }}>Rules & Format</div>
+        <div style={{ fontFamily:OT.sans, fontSize:11, color:OT.faint, letterSpacing:"0.06em" }}>BRBC Ryder Cup 2026 · Official Guidelines</div>
+      </div>
+      <div style={{ padding:"8px 16px 32px", display:"flex", flexDirection:"column", gap:12 }}>
+        {rules.map((r, i) => (
+          <div key={i} style={{ background:OT.surface, borderRadius:6, padding:"14px 16px", borderLeft:`3px solid ${OT.gold}` }}>
+            <div style={{ fontFamily:OT.serif, fontSize:14, fontWeight:700, color:OT.ink, marginBottom:6, letterSpacing:"0.02em" }}>{r.title}</div>
+            <div style={{ fontFamily:OT.sans, fontSize:12.5, color:OT.soft, lineHeight:1.6 }}>{r.body}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 Object.assign(window, {
   OT, Score, OHeader, ONav, OSectionHead,
   OScreenScoreboard, OScreenMatchDetail,
-  OScreenTeams, OScreenRankings, OScreenHistory,
+  OScreenTeams, OScreenRankings, OScreenHistory, OScreenRules,
 });
