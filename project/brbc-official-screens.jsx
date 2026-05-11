@@ -70,11 +70,11 @@ function OHeader() {
         <div style={{ background:"#C9A84C" }}></div>
         <div style={{ background:OT.brooksLight }}></div>
       </div>
-      <div style={{ textAlign:"center", padding:"0 20px 16px" }}>
+      <div style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"0 20px 16px" }}>
         <img
           src="assets/brbc-logo-new.png"
           alt="BRBC Ryder Cup"
-          style={{ height:200, objectFit:"contain", display:"block", margin:"0 auto 10px" }}
+          style={{ height:200, objectFit:"contain", marginBottom:10 }}
         />
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
           <div style={{ flex:1, height:1, background:`linear-gradient(90deg,transparent,${OT.ruleStrong})` }}></div>
