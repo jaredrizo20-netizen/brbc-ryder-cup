@@ -199,7 +199,7 @@ function OMatchCard({ m, onTap }) {
 
 function BRBCFooter() {
   return (
-    <div style={{ textAlign:"center", padding:"24px 16px 32px", borderTop:`1px solid ${OT.rule}` }}>
+    <div style={{ textAlign:"center", padding:"12px 16px 16px", borderTop:`1px solid ${OT.rule}` }}>
       <img
         src="assets/brbc-footer-logo.png?v=3"
         alt="Brooks Rizo Booze Classic"
