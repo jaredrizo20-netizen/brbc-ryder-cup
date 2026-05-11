@@ -198,48 +198,13 @@ function OMatchCard({ m, onTap }) {
 }
 
 function BRBCFooter() {
-  const navy = OT.rizoLight, crimson = OT.brooksLight, gold = "#C9A84C";
   return (
-    <div style={{ textAlign:"center", padding:"28px 16px 36px", borderTop:`1px solid ${OT.rule}` }}>
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:6 }}>
-
-        {/* Golf flag */}
-        <svg width="42" height="40" viewBox="0 0 42 40" fill="none">
-          <ellipse cx="14" cy="33" rx="13" ry="7" fill={navy}/>
-          <path d="M5 33 Q14 26 24 30" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-          <line x1="14" y1="8" x2="14" y2="33" stroke="#111" strokeWidth="1.8" strokeLinecap="round"/>
-          <polygon points="14,8 28,13 14,19" fill={crimson}/>
-          <polygon points="15,10 26,14 15,18" fill="white" opacity="0.2"/>
-        </svg>
-
-        {/* BRBC wordmark */}
-        <span style={{ fontFamily:OT.sans, fontSize:38, fontWeight:900, letterSpacing:"0.04em", color:navy, lineHeight:1 }}>BRBC</span>
-
-        {/* Beer mugs */}
-        <svg width="52" height="40" viewBox="0 0 52 40" fill="none">
-          {/* Left mug */}
-          <path d="M4,10 L3,32 L18,32 L17,10 Z" fill={gold}/>
-          <path d="M17,14 C25,14 25,28 17,28" stroke={gold} strokeWidth="3.5" strokeLinecap="round"/>
-          <ellipse cx="10.5" cy="10" rx="7.5" ry="3.5" fill="white"/>
-          <circle cx="7" cy="7.5" r="3" fill="white"/>
-          <circle cx="14" cy="7" r="2.5" fill="white"/>
-          <circle cx="10" cy="5.5" r="1.8" fill="white"/>
-          {/* Right mug */}
-          <path d="M26,13 L25,34 L40,34 L39,13 Z" fill={gold}/>
-          <path d="M39,17 C47,17 47,31 39,31" stroke={gold} strokeWidth="3.5" strokeLinecap="round"/>
-          <ellipse cx="32.5" cy="13" rx="7.5" ry="3.5" fill="white"/>
-          <circle cx="29" cy="10.5" r="3" fill="white"/>
-          <circle cx="36" cy="10" r="2.5" fill="white"/>
-          <circle cx="32" cy="8.5" r="1.8" fill="white"/>
-        </svg>
-      </div>
-
-      <div style={{ fontFamily:OT.serif, fontSize:14, fontWeight:600, letterSpacing:"0.18em", color:navy, textTransform:"uppercase", marginBottom:3 }}>
-        Brooks Rizo Booze Classic
-      </div>
-      <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:600, letterSpacing:"0.22em", color:OT.faint, textTransform:"uppercase" }}>
-        Est. 2019
-      </div>
+    <div style={{ textAlign:"center", padding:"24px 16px 32px", borderTop:`1px solid ${OT.rule}` }}>
+      <img
+        src="assets/brbc-footer-logo.png"
+        alt="Brooks Rizo Booze Classic"
+        style={{ maxWidth:"100%", width:260, height:"auto", display:"block", margin:"0 auto" }}
+      />
     </div>
   );
 }
