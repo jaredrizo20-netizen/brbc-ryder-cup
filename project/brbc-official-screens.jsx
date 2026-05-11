@@ -74,7 +74,7 @@ function OHeader() {
         <img
           src="assets/brbc-logo-new.png"
           alt="BRBC Ryder Cup"
-          style={{ height:190, display:"block", margin:"0 auto" }}
+          style={{ maxHeight:190, maxWidth:"100%", width:"auto", height:"auto", display:"block", margin:"0 auto" }}
         />
       </div>
       <div style={{ display:"flex", alignItems:"center", gap:10, padding:"0 16px 14px" }}>
@@ -197,6 +197,7 @@ function OScreenScoreboard({ D, onNav }) {
   const r=D.team_rizo.score, b=D.team_brooks.score, max=25, target=12.5;
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
+      <OHeader />
       {/* Score banner */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", padding:"16px 16px 12px", alignItems:"center", borderBottom:`1px solid ${OT.rule}` }}>
         <div>

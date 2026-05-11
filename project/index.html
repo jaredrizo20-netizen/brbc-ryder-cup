@@ -44,7 +44,7 @@
 // LiveCtx must be defined before the screens script loads, so define it here.
 window.LiveCtx = React.createContext({ holes: {}, setHole: null });
 </script>
-<script type="text/babel" src="brbc-official-screens.jsx?v=5"></script>
+<script type="text/babel" src="brbc-official-screens.jsx?v=6"></script>
 
 <script type="text/babel" data-presets="env,react">
 const { useState, useEffect, useCallback, useRef, useMemo } = React;
@@ -339,7 +339,6 @@ function App() {
     <window.LiveCtx.Provider value={{ holes: fbHolesData, setHole }}>
       <div style={{ display:"flex", flexDirection:"column", height:"100%", background:OT.bg }}>
         <ONav active={navActive} onNav={navigate} />
-        <OHeader />
         {screen === "match-detail" && <BackButton onClick={goBack} />}
         {screen === "scoreboard"   && <OScreenScoreboard D={D} onNav={selectMatch} />}
         {screen === "match-detail" && <OScreenMatchDetail key={selectedMatch} D={D} matchId={selectedMatch} onBack={goBack} />}
