@@ -64,17 +64,17 @@ function clinchLocal(holes, lo, hi) {
 
 function OHeader() {
   return (
-    <div style={{ position:"relative", paddingTop:"calc(env(safe-area-inset-top,0px) + 48px)", background:OT.bg, borderBottom:`1px solid ${OT.rule}` }}>
+    <div style={{ position:"relative", paddingTop:18, background:OT.bg, borderBottom:`1px solid ${OT.rule}` }}>
       <div style={{ position:"absolute", top:0, left:0, right:0, height:4, display:"grid", gridTemplateColumns:"1fr 1fr 1fr" }}>
         <div style={{ background:OT.rizoLight }}></div>
         <div style={{ background:"#C9A84C" }}></div>
         <div style={{ background:OT.brooksLight }}></div>
       </div>
-      <div style={{ textAlign:"center", padding:"0 20px 14px" }}>
+      <div style={{ textAlign:"center", padding:"0 20px 16px" }}>
         <img
           src="assets/brbc-logo-new.png"
           alt="BRBC Ryder Cup"
-          style={{ height:110, objectFit:"contain", display:"block", margin:"0 auto 8px" }}
+          style={{ height:200, objectFit:"contain", display:"block", margin:"0 auto 10px" }}
         />
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
           <div style={{ flex:1, height:1, background:`linear-gradient(90deg,transparent,${OT.ruleStrong})` }}></div>
@@ -104,10 +104,10 @@ function ONav({ active, onNav }) {
     { id:"history",    label:"History",  icon:<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M7 4h10v6a5 5 0 0 1-10 0z"/><path d="M9 20h6M12 15v5"/></svg> },
   ];
   return (
-    <div style={{ display:"grid", gridTemplateColumns:`repeat(${items.length},1fr)`, background:OT.bg, borderTop:`1px solid ${OT.rule}`, paddingBottom:"env(safe-area-inset-bottom,0px)" }}>
+    <div style={{ display:"grid", gridTemplateColumns:`repeat(${items.length},1fr)`, background:OT.bg, borderBottom:`1px solid ${OT.rule}`, paddingTop:"env(safe-area-inset-top,0px)" }}>
       {items.map(it => (
         <button key={it.id} onClick={() => onNav(it.id)} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:3, padding:"10px 0 10px", background:"none", border:"none", cursor:"pointer", color: active===it.id ? OT.rizoLight : OT.faint, position:"relative" }}>
-          {active===it.id && <div style={{ position:"absolute", top:0, left:"50%", transform:"translateX(-50%)", width:24, height:2, background:OT.rizoLight }}></div>}
+          {active===it.id && <div style={{ position:"absolute", bottom:0, left:"50%", transform:"translateX(-50%)", width:24, height:2, background:OT.rizoLight }}></div>}
           {it.icon}
           <span style={{ fontFamily:OT.sans, fontSize:9, fontWeight: active===it.id ? 700 : 500, letterSpacing:"0.12em", textTransform:"uppercase" }}>{it.label}</span>
         </button>
