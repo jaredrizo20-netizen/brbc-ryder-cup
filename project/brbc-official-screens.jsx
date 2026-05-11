@@ -64,23 +64,23 @@ function clinchLocal(holes, lo, hi) {
 
 function OHeader() {
   return (
-    <div style={{ position:"relative", paddingTop:18, background:OT.bg, borderBottom:`1px solid ${OT.rule}` }}>
-      <div style={{ position:"absolute", top:0, left:0, right:0, height:4, display:"grid", gridTemplateColumns:"1fr 1fr 1fr" }}>
+    <div style={{ background:OT.bg, borderBottom:`1px solid ${OT.rule}` }}>
+      <div style={{ height:4, display:"grid", gridTemplateColumns:"1fr 1fr 1fr" }}>
         <div style={{ background:OT.rizoLight }}></div>
         <div style={{ background:"#C9A84C" }}></div>
         <div style={{ background:OT.brooksLight }}></div>
       </div>
-      <div style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"0 20px 16px" }}>
+      <div style={{ padding:"18px 0 14px", textAlign:"center" }}>
         <img
           src="assets/brbc-logo-new.png"
           alt="BRBC Ryder Cup"
-          style={{ height:200, objectFit:"contain", marginBottom:10 }}
+          style={{ height:190, display:"block", margin:"0 auto" }}
         />
-        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-          <div style={{ flex:1, height:1, background:`linear-gradient(90deg,transparent,${OT.ruleStrong})` }}></div>
-          <span style={{ fontFamily:OT.serif, fontSize:13, fontWeight:700, letterSpacing:"0.18em", textTransform:"uppercase", color:OT.rizoLight }}>Ryder Cup 2026</span>
-          <div style={{ flex:1, height:1, background:`linear-gradient(90deg,${OT.ruleStrong},transparent)` }}></div>
-        </div>
+      </div>
+      <div style={{ display:"flex", alignItems:"center", gap:10, padding:"0 16px 14px" }}>
+        <div style={{ flex:1, height:1, background:`linear-gradient(90deg,transparent,${OT.ruleStrong})` }}></div>
+        <span style={{ fontFamily:OT.serif, fontSize:13, fontWeight:700, letterSpacing:"0.18em", textTransform:"uppercase", color:OT.rizoLight }}>Ryder Cup 2026</span>
+        <div style={{ flex:1, height:1, background:`linear-gradient(90deg,${OT.ruleStrong},transparent)` }}></div>
       </div>
     </div>
   );
