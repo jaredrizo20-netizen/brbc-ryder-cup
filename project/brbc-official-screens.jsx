@@ -203,7 +203,7 @@ function BRBCFooter() {
       <img
         src="assets/brbc-footer-logo.png"
         alt="Brooks Rizo Booze Classic"
-        style={{ maxWidth:"100%", width:260, height:"auto", display:"block", margin:"0 auto" }}
+        style={{ maxWidth:"100%", width:200, height:"auto", display:"block", margin:"0 auto" }}
       />
     </div>
   );
