@@ -119,7 +119,6 @@ function ONav({ active, onNav }) {
 // ─── Match card ───────────────────────────────────────────────────
 function OMatchCard({ m, onTap }) {
   const lead = m.lead, amt = m.lead_amt || 0;
-  // remaining > 0 → clinched early ("5&4"); remaining = 0 → won on last hole ("1 UP")
   const subVal = seg => {
     if (!seg || !seg.winner) return { txt:"—", color:OT.faint, final:false };
     if (seg.winner==="halved") return { txt:"AS", color:OT.soft, final:true };
@@ -128,6 +127,20 @@ function OMatchCard({ m, onTap }) {
     return { txt, color, final:true };
   };
   const f=subVal(m.front), ba=subVal(m.back), t=subVal(m.total);
+
+  // Center score: use clinch format when decided, live lead otherwise
+  let centerTxt, centerColor, centerSub;
+  if (m.status === "upcoming") {
+    centerTxt = "—"; centerColor = OT.soft; centerSub = "Upcoming";
+  } else if (m.total && m.total.winner) {
+    centerTxt = t.txt; centerColor = t.color;
+    centerSub = m.total.winner === "halved" ? "All Square" : m.total.winner;
+  } else {
+    centerTxt = amt === 0 ? "AS" : `${amt} UP`;
+    centerColor = lead==="rizo" ? OT.rizoLight : lead==="brooks" ? OT.brooksLight : OT.soft;
+    centerSub = lead ? lead : "All Square";
+  }
+
   const borderColor = lead==="rizo" ? OT.rizoLight : lead==="brooks" ? OT.brooksLight : OT.rule;
   return (
     <div onClick={() => onTap && onTap(m.id)} style={{ background:OT.bg, border:`1px solid ${OT.rule}`, borderLeft:`2px solid ${borderColor}`, cursor: onTap ? "pointer" : "default" }}>
@@ -151,11 +164,11 @@ function OMatchCard({ m, onTap }) {
           {m.rizo.players.map((p,i) => <div key={i} style={{ fontFamily:OT.sans, fontSize:12.5, fontWeight:400, color:OT.ink, lineHeight:1.3 }}>{p}</div>)}
         </div>
         <div style={{ textAlign:"center", minWidth:76, padding:"2px 4px" }}>
-          <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, lineHeight:1, letterSpacing:"-0.01em", color: lead==="rizo"?OT.rizoLight:lead==="brooks"?OT.brooksLight:OT.soft }}>
-            {amt===0 ? "AS" : `${amt} UP`}
+          <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, lineHeight:1, letterSpacing:"-0.01em", color:centerColor }}>
+            <Score v={centerTxt} />
           </div>
           <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:600, letterSpacing:"0.18em", color:OT.faint, marginTop:3, textTransform:"uppercase" }}>
-            {lead ? lead : "All Square"}
+            {centerSub}
           </div>
         </div>
         <div style={{ textAlign:"right" }}>
