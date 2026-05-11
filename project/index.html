@@ -7,15 +7,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <title>BRBC · Ryder Cup 2026</title>
-<link rel="stylesheet" href="brbc.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; background: #F5F1E6; }
-  #app { height: 100%; }
-  /* Safe area insets for notched phones */
-  .brbc {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body, #app { height: 100%; }
+  body {
+    background: #FFFFFF;
+    font-family: "Inter", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
   }
+  #app { display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; height: 100%; overflow: hidden; }
+  button { -webkit-tap-highlight-color: transparent; }
+  ::-webkit-scrollbar { display: none; }
 </style>
 </head>
 <body>
@@ -34,18 +39,20 @@
 <!-- Data -->
 <script src="data.js"></script>
 
-<!-- Shared components -->
-<script type="text/babel" src="brbc-shared.jsx?v=3"></script>
-<script type="text/babel" src="brbc-screens.jsx?v=3"></script>
+<!-- Screens -->
+<script type="text/babel" data-presets="env,react">
+// LiveCtx must be defined before the screens script loads, so define it here.
+window.LiveCtx = React.createContext({ holes: {}, setHole: null });
+</script>
+<script type="text/babel" src="brbc-official-screens.jsx?v=1"></script>
 
 <script type="text/babel" data-presets="env,react">
-const { useState, useEffect, useCallback, useRef } = React;
+const { useState, useEffect, useCallback, useRef, useMemo } = React;
 
 // ─────────────────────────────────────────────────────────────
-// Score computation (ported from the existing app)
+// Score computation
 // ─────────────────────────────────────────────────────────────
 
-// fbHoles: { '1': 'rizo' | 'brooks' | 'halved', ... }
 function clinchStatus(fbHoles, segment) {
   const start = segment === "front" ? 1 : segment === "back" ? 10 : 1;
   const end   = segment === "front" ? 9 : segment === "back" ? 18 : 18;
@@ -53,7 +60,7 @@ function clinchStatus(fbHoles, segment) {
   let rizo = 0, brooks = 0, entered = 0;
   for (let i = start; i <= end; i++) {
     const v = fbHoles[i] || fbHoles[String(i)];
-    if (!v) break; // stop at first gap — sequential only
+    if (!v) break;
     if (v === "rizo") rizo++;
     else if (v === "brooks") brooks++;
     entered++;
@@ -126,13 +133,11 @@ function calcProjectedPts(fbHoles) {
   return { r: fProj.r + bProj.r + tProj.r, b: fProj.b + bProj.b + tProj.b };
 }
 
-// Derive a fully populated match object from Firebase holes + static match definition
 function deriveMatch(staticMatch, fbHoles) {
   const holes = fbHoles || {};
   const pts = calcMatchPts(holes);
   const { rF, bF, rB, bB, rT, bT, frontPlayed, backPlayed, tPlayed } = pts;
 
-  // Thru = highest sequential hole played
   let thru = 0;
   for (let i = 18; i >= 1; i--) {
     if (holes[i] || holes[String(i)]) { thru = i; break; }
@@ -140,7 +145,6 @@ function deriveMatch(staticMatch, fbHoles) {
 
   const status = thru >= 18 ? "complete" : thru > 0 ? "live" : "upcoming";
 
-  // Front 9 sub-result — freeze at clinch point so extra holes don't change the score
   const fClinched = clinchStatus(holes, "front");
   let frontWinner = null, frontMargin = 0, frontRemaining = 0;
   if (frontPlayed === 9 || fClinched) {
@@ -154,7 +158,6 @@ function deriveMatch(staticMatch, fbHoles) {
     }
   }
 
-  // Back 9 sub-result
   const bClinched = clinchStatus(holes, "back");
   let backWinner = null, backMargin = 0, backRemaining = 0;
   if (backPlayed === 9 || bClinched) {
@@ -168,7 +171,6 @@ function deriveMatch(staticMatch, fbHoles) {
     }
   }
 
-  // Total
   const tClinched = clinchStatus(holes, "total");
   let totalWinner = null, totalMargin = 0, totalRemaining = 0;
   if ((frontPlayed === 9 && backPlayed === 9) || tClinched) {
@@ -182,11 +184,9 @@ function deriveMatch(staticMatch, fbHoles) {
     }
   }
 
-  // Overall match lead
   const lead = rT > bT ? "rizo" : bT > rT ? "brooks" : null;
   const lead_amt = Math.abs(rT - bT);
 
-  // Build holes array using par/dist from static match data
   const holeMeta = {};
   (staticMatch.holes || []).forEach(h => { holeMeta[h.n] = { par: h.par, dist: h.dist }; });
 
@@ -205,35 +205,40 @@ function deriveMatch(staticMatch, fbHoles) {
     status,
     lead,
     lead_amt,
-    front:  { winner: frontWinner,  margin: frontMargin,  remaining: frontRemaining,  in_progress: frontPlayed < 9 },
-    back:   { winner: backWinner,   margin: backMargin,   remaining: backRemaining,   in_progress: backPlayed < 9 },
-    total:  { winner: totalWinner,  margin: totalMargin,  remaining: totalRemaining,  in_progress: tPlayed < 18 },
+    front: { winner: frontWinner, margin: frontMargin, remaining: frontRemaining, in_progress: frontPlayed < 9 },
+    back:  { winner: backWinner,  margin: backMargin,  remaining: backRemaining,  in_progress: backPlayed < 9 },
+    total: { winner: totalWinner, margin: totalMargin, remaining: totalRemaining, in_progress: tPlayed < 18 },
     holes: holesArr,
   };
 }
 
 // ─────────────────────────────────────────────────────────────
+// Back button (used when viewing match detail)
+// ─────────────────────────────────────────────────────────────
+function BackButton({ onClick }) {
+  return (
+    <button onClick={onClick} style={{ display:"flex", alignItems:"center", gap:5, padding:"10px 16px", background:"none", border:"none", cursor:"pointer", color:OT.rizoLight, fontFamily:OT.sans, fontSize:13, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", borderBottom:`1px solid ${OT.rule}`, width:"100%" }}>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+      All Matches
+    </button>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 // App
 // ─────────────────────────────────────────────────────────────
-// Keep original static match definitions for par/dist metadata
 const STATIC_MATCHES = JSON.parse(JSON.stringify(window.BRBC_DATA.matches));
 
 function App() {
-  const [screen, setScreen]            = useState("scoreboard");
-  const [selectedMatchId, setSelected] = useState(null);
-  // Firebase hole data: { [matchId]: { [holeNum]: 'rizo'|'brooks'|'halved' } }
-  const [fbHolesData, setFbHolesData]  = useState({});
-  // True after Firebase has sent its first snapshot (even if empty)
-  const [fbReady, setFbReady] = useState(false);
+  const [screen, setScreen]           = useState("scoreboard");
+  const [selectedMatch, setSelectedMatch] = useState(null);
+  const [fbHolesData, setFbHolesData] = useState({});
+  const [fbReady, setFbReady]         = useState(false);
   const dbRef = useRef(null);
 
-  // Expose match selection to scoreboard (accessed via window to avoid prop-drilling)
-  useEffect(() => {
-    window.BRBC_SELECT_MATCH = (id) => setSelected(id);
-    return () => { delete window.BRBC_SELECT_MATCH; };
-  }, []);
-
-  // Firebase: subscribe to match holes
+  // Firebase subscription
   useEffect(() => {
     let db;
     try {
@@ -246,9 +251,7 @@ function App() {
         messagingSenderId: "822325966523",
         appId: "1:822325966523:web:8e030bd543c00b685ddb9e",
       };
-      const app = firebase.apps.length
-        ? firebase.apps[0]
-        : firebase.initializeApp(firebaseConfig);
+      const app = firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(firebaseConfig);
       db = firebase.database(app);
       dbRef.current = db;
     } catch (err) {
@@ -267,23 +270,18 @@ function App() {
     return () => matchesRef.off("value", handler);
   }, []);
 
-  // ── Derive match data synchronously during render so all children see fresh values ──
-  // Always compute (for memoisation), but only write to BRBC_DATA after Firebase connects.
-  // Before fbReady the static mock data in data.js stays intact.
+  // Derive match data from Firebase holes
   const D = window.BRBC_DATA;
-
-  const derivedMatches = React.useMemo(
+  const derivedMatches = useMemo(
     () => STATIC_MATCHES.map(m => deriveMatch(m, fbHolesData[m.id] || {})),
     [fbHolesData]
   );
-
   if (fbReady) {
     D.matches = derivedMatches;
-
     let rizoScore = 0, brooksScore = 0, rizoProj = 0, brooksProj = 0;
     STATIC_MATCHES.forEach(m => {
       const fbH = fbHolesData[m.id] || {};
-      const pts  = calcMatchPts(fbH);
+      const pts = calcMatchPts(fbH);
       rizoScore   += pts.front.r + pts.back.r + pts.total.r;
       brooksScore += pts.front.b + pts.back.b + pts.total.b;
       const proj   = calcProjectedPts(fbH);
@@ -296,44 +294,60 @@ function App() {
     D.team_brooks.projected = parseFloat(brooksProj.toFixed(1));
   }
 
-  // Write a single hole result to Firebase
+  // Write a single hole result to Firebase (optimistic local update otherwise)
   const setHole = useCallback((matchId, holeNum, result) => {
     if (!dbRef.current) {
-      // Offline fallback: update local state only
       setFbHolesData(prev => {
         const matchHoles = { ...(prev[matchId] || {}) };
-        if (result === null) {
-          delete matchHoles[holeNum];
-        } else {
-          matchHoles[holeNum] = result;
-        }
+        if (result === null) delete matchHoles[holeNum];
+        else matchHoles[holeNum] = result;
         return { ...prev, [matchId]: matchHoles };
       });
       return;
     }
     const path = `matches/${matchId}/holes/${holeNum}`;
-    if (result === null) {
-      dbRef.current.ref(path).remove();
-    } else {
-      dbRef.current.ref(path).set(result);
-    }
+    if (result === null) dbRef.current.ref(path).remove();
+    else dbRef.current.ref(path).set(result);
     dbRef.current.ref(`matches/${matchId}/lastUpdated`).set(Date.now());
   }, []);
 
-  // Resolve the match to show in detail view
-  const activeMatchId = selectedMatchId
-    || (window.BRBC_DATA.matches.find(m => m.status === "live") || window.BRBC_DATA.matches[0]).id;
+  // Persist last tab
+  useEffect(() => {
+    const saved = sessionStorage.getItem("brbc-screen");
+    if (saved && saved !== "match-detail") setScreen(saved);
+  }, []);
+  useEffect(() => {
+    if (screen !== "match-detail") sessionStorage.setItem("brbc-screen", screen);
+  }, [screen]);
+
+  const navigate = useCallback((s) => {
+    setSelectedMatch(null);
+    setScreen(s);
+  }, []);
+  const selectMatch = useCallback((id) => {
+    setSelectedMatch(id);
+    setScreen("match-detail");
+  }, []);
+  const goBack = useCallback(() => {
+    setSelectedMatch(null);
+    setScreen("scoreboard");
+  }, []);
+
+  const navActive = screen === "match-detail" ? "scoreboard" : screen;
 
   return (
-    <NavCtx.Provider value={{ current: screen, navigate: setScreen }}>
-      <LiveCtx.Provider value={{ holes: fbHolesData, setHole }}>
-        {screen === "scoreboard" && <ScreenScoreboard />}
-        {screen === "matches"    && <ScreenMatchDetail key={activeMatchId} matchId={activeMatchId} />}
-        {screen === "teams"      && <ScreenTeams />}
-        {screen === "rankings"   && <ScreenRankings />}
-        {screen === "history"    && <ScreenHistory />}
-      </LiveCtx.Provider>
-    </NavCtx.Provider>
+    <window.LiveCtx.Provider value={{ holes: fbHolesData, setHole }}>
+      <div style={{ display:"flex", flexDirection:"column", height:"100%", background:OT.bg }}>
+        <OHeader />
+        {screen === "match-detail" && <BackButton onClick={goBack} />}
+        {screen === "scoreboard"   && <OScreenScoreboard D={D} onNav={selectMatch} />}
+        {screen === "match-detail" && <OScreenMatchDetail key={selectedMatch} D={D} matchId={selectedMatch} onBack={goBack} />}
+        {screen === "teams"        && <OScreenTeams D={D} />}
+        {screen === "rankings"     && <OScreenRankings D={D} />}
+        {screen === "history"      && <OScreenHistory D={D} />}
+        <ONav active={navActive} onNav={navigate} />
+      </div>
+    </window.LiveCtx.Provider>
   );
 }
 
