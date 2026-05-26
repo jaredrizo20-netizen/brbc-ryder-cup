@@ -226,25 +226,14 @@ function OScreenScoreboard({ D, onNav }) {
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
         </div>
         <div style={{ textAlign:"center", padding:"0 12px" }}>
-          <img src="assets/brbc-logo-new.png" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto" }} />
+          <img src="assets/brbc-logo-new.png" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto 4px" }} />
+          <div style={{ fontSize:14 }}>🏆</div>
+          <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.14em", color:OT.gold, textTransform:"uppercase", marginTop:2 }}>{target} to win</div>
         </div>
         <div style={{ textAlign:"center" }}>
           <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", color:OT.brooksLight, marginBottom:6 }}>Brooks</div>
           <div style={{ fontFamily:OT.serif, fontSize:58, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks }}>{b}</div>
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_brooks.projected.toFixed(1)}</div>
-        </div>
-      </div>
-      {/* Progress */}
-      <div style={{ padding:"10px 16px 14px", borderBottom:`1px solid ${OT.rule}` }}>
-        <div style={{ position:"relative", height:3, background:OT.rule }}>
-          <div style={{ position:"absolute", top:0, left:0, bottom:0, width:`${(r/max)*100}%`, background:OT.rizoLight }}></div>
-          <div style={{ position:"absolute", top:0, right:0, bottom:0, width:`${(b/max)*100}%`, background:OT.brooksLight }}></div>
-          <div style={{ position:"absolute", top:-3, left:`${(target/max)*100}%`, width:1, height:9, background:OT.goldLight, transform:"translateX(-0.5px)" }}></div>
-        </div>
-        <div style={{ display:"flex", justifyContent:"space-between", marginTop:7, fontFamily:OT.serif, fontSize:10, fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase" }}>
-          <span style={{ color:OT.rizoLight, fontFamily:OT.serif }}>Rizo</span>
-          <span style={{ color:OT.gold, fontFamily:OT.sans, fontSize:10, fontWeight:600 }}>{target} to win</span>
-          <span style={{ color:OT.brooksLight, fontFamily:OT.serif }}>Brooks</span>
         </div>
       </div>
       {live.length > 0 && <>
