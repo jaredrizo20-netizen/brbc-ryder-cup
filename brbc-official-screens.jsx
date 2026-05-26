@@ -72,7 +72,7 @@ function OHeader() {
       </div>
       <div style={{ padding:"18px 0 18px", textAlign:"center" }}>
         <img
-          src="assets/brbc-logo-new.png?v=2"
+          src="assets/brbc-logo-new.png?v=3"
           alt="BRBC Ryder Cup"
           style={{ maxHeight:150, maxWidth:"100%", width:"auto", height:"auto", display:"block", margin:"0 auto" }}
         />
