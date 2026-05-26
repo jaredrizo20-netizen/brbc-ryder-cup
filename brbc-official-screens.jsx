@@ -227,7 +227,10 @@ function OScreenScoreboard({ D, onNav }) {
         </div>
         <div style={{ textAlign:"center", padding:"0 12px" }}>
           <img src="assets/brbc-logo-new.png" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto 4px" }} />
-          <div style={{ fontSize:14 }}>🏆</div>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={OT.goldLight} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display:"block", margin:"0 auto" }}>
+            <path d="M7 4h10v5a5 5 0 0 1-10 0z"/>
+            <path d="M5 4H3.5v2A2.5 2.5 0 0 0 6 8.5M19 4h1.5v2A2.5 2.5 0 0 1 18 8.5M9 19h6M12 14v5"/>
+          </svg>
           <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.14em", color:OT.gold, textTransform:"uppercase", marginTop:2 }}>{target} to win</div>
         </div>
         <div style={{ textAlign:"center" }}>
