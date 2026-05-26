@@ -329,7 +329,7 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
       const txt = clinched.remaining > 0 ? `${clinched.up}&${clinched.remaining}` : `${clinched.up} UP`;
       return { txt, color, final:true };
     }
-    if (d === 0 && s.played === holeCount) return { txt:"AS", color:OT.soft, final:true };
+    if (d === 0 && s.played === holeCount) return { txt:"AS", color:OT.goldLight, final:true };
     if (d === 0) return { txt:"AS", color:OT.soft, final:false };
     return { txt:`${Math.abs(d)} UP`, color: d>0?OT.rizoLight:OT.brooksLight, final: s.played === holeCount };
   };
@@ -374,7 +374,7 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
         </div>
         <div style={{ textAlign:"center", minWidth:86 }}>
           <div style={{ fontFamily:OT.serif, fontSize:38, fontWeight:600, lineHeight:1, color:heroColor, letterSpacing:"-0.02em" }}><Score v={heroTxt} /></div>
-          <div style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.2em", color:OT.faint, marginTop:2, textTransform:"uppercase" }}>
+          <div style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.2em", color:thru===18 ? heroColor : OT.faint, marginTop:2, textTransform:"uppercase" }}>
             {thru===0?"Not Started":thru===18?"Final":`Thru ${thru}`}
           </div>
         </div>
