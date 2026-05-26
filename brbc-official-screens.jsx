@@ -72,7 +72,7 @@ function OHeader() {
       </div>
       <div style={{ padding:"18px 0 18px", textAlign:"center" }}>
         <img
-          src="assets/brbc-logo-new.png"
+          src="assets/brbc-logo-new.png?v=2"
           alt="BRBC Ryder Cup"
           style={{ maxHeight:150, maxWidth:"100%", width:"auto", height:"auto", display:"block", margin:"0 auto" }}
         />
@@ -226,7 +226,7 @@ function OScreenScoreboard({ D, onNav }) {
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
         </div>
         <div style={{ textAlign:"center", padding:"0 12px" }}>
-          <img src="assets/brbc-logo-new.png" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto 4px" }} />
+          <img src="assets/brbc-logo-new.png?v=2" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto 4px" }} />
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={OT.goldLight} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display:"block", margin:"0 auto" }}>
             <path d="M7 4h10v5a5 5 0 0 1-10 0z"/>
             <path d="M5 4H3.5v2A2.5 2.5 0 0 0 6 8.5M19 4h1.5v2A2.5 2.5 0 0 1 18 8.5M9 19h6M12 14v5"/>
