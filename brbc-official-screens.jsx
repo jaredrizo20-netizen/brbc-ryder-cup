@@ -220,15 +220,15 @@ function OScreenScoreboard({ D, onNav }) {
     <div style={{ flex:1, overflowY:"auto" }}>
       {/* Score banner */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", padding:"16px 16px 12px", alignItems:"center", borderBottom:`1px solid ${OT.rule}` }}>
-        <div style={{ textAlign:"right" }}>
+        <div style={{ textAlign:"center" }}>
           <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", color:OT.rizoLight, marginBottom:6 }}>Rizo</div>
           <div style={{ fontFamily:OT.serif, fontSize:58, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo }}>{r}</div>
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
         </div>
         <div style={{ textAlign:"center", padding:"0 12px" }}>
-          <img src="assets/brbc-logo-new.png" alt="BRBC" style={{ width:110, height:"auto", display:"block", margin:"0 auto" }} />
+          <img src="assets/brbc-logo-new.png" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto" }} />
         </div>
-        <div style={{ textAlign:"left" }}>
+        <div style={{ textAlign:"center" }}>
           <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", color:OT.brooksLight, marginBottom:6 }}>Brooks</div>
           <div style={{ fontFamily:OT.serif, fontSize:58, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks }}>{b}</div>
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_brooks.projected.toFixed(1)}</div>
