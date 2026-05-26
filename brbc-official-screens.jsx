@@ -218,7 +218,6 @@ function OScreenScoreboard({ D, onNav }) {
   const r=D.team_rizo.score, b=D.team_brooks.score, max=25, target=12.5;
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
-      <OHeader />
       {/* Score banner */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", padding:"16px 16px 12px", alignItems:"center", borderBottom:`1px solid ${OT.rule}` }}>
         <div>
@@ -227,13 +226,8 @@ function OScreenScoreboard({ D, onNav }) {
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
         </div>
         <div style={{ textAlign:"center", padding:"0 8px" }}>
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={OT.gold} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display:"block", margin:"0 auto 4px" }}>
-            <path d="M7 4h10v5a5 5 0 0 1-10 0z"/>
-            <path d="M5 4H3.5v2A2.5 2.5 0 0 0 6 8.5M19 4h1.5v2A2.5 2.5 0 0 1 18 8.5M9 19h6M12 14v5"/>
-          </svg>
-          <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase" }}>First To</div>
-          <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, color:OT.gold, lineHeight:1 }}>{target}</div>
-          <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase" }}>Points</div>
+          <img src="assets/brbc-logo-new.png" alt="BRBC" style={{ width:110, height:"auto", display:"block", margin:"0 auto 6px" }} />
+          <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.16em", color:OT.faint, textTransform:"uppercase", lineHeight:1.4 }}>First to {target} pts</div>
         </div>
         <div style={{ textAlign:"right" }}>
           <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", color:OT.brooksLight, marginBottom:6 }}>Brooks</div>
