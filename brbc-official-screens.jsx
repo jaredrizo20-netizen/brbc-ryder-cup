@@ -600,10 +600,9 @@ function OScreenRules() {
   const rules = [
     { title:"Match Play Format", body:"All matches are played in match play format. Each hole is won, lost, or halved. The player or team that wins the most holes wins the match." },
     { title:"Scoring", body:"Each match is worth up to 3 points — 1 for the front 9, 1 for the back 9, and 1 for the overall 18-hole result. The first team to 12.5 points wins the Cup." },
-    { title:"Concessions", body:"Putts, holes, or matches may be conceded at any time. A conceded putt cannot be refused. Conceded strokes count in the score but are not holed out." },
+    { title:"Concessions", body:"Putts, holes, or matches may be conceded at any time." },
     { title:"Local Rules", body:"USGA rules apply. Play the ball up in the fairway. Scramble format — 1 club length drop allowed without changing your lie." },
-    { title:"Disputes & Rulings", body:"Any dispute should be raised immediately. Play a second ball if possible. Tournament officials have final authority on all rulings. Good sportsmanship is expected at all times." },
-    { title:"Spirit of the Game", body:"The BRBC Ryder Cup is a competition among friends. Respect your fellow competitors, the course, and the spirit of the game. May the best team win." },
+    { title:"Spirit of the Game", body:"Don't be a jackass. Respect your fellow competitors, the course, and the game. Any dispute should be raised immediately — tournament officials have final say. May the best team win." },
   ];
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
