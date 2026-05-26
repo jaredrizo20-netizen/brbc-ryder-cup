@@ -34,9 +34,9 @@ function Score({ v }) {
 }
 
 // Final badge — small gold "FINAL" tag below a segment score
-function FinalBadge() {
+function FinalBadge({ color }) {
   return (
-    <div style={{ fontFamily: OT.sans, fontSize: 8, fontWeight: 700, letterSpacing: "0.16em", color: OT.goldLight, textAlign: "center", marginTop: 3, textTransform: "uppercase" }}>
+    <div style={{ fontFamily: OT.sans, fontSize: 8, fontWeight: 700, letterSpacing: "0.16em", color: color || OT.goldLight, textAlign: "center", marginTop: 3, textTransform: "uppercase" }}>
       Final
     </div>
   );
@@ -116,7 +116,7 @@ function OMatchCard({ m, onTap }) {
   const lead = m.lead, amt = m.lead_amt || 0;
   const subVal = seg => {
     if (!seg || !seg.winner) return { txt:"—", color:OT.faint, final:false };
-    if (seg.winner==="halved") return { txt:"AS", color:OT.soft, final:true };
+    if (seg.winner==="halved") return { txt:"AS", color:OT.goldLight, final:true };
     const color = seg.winner==="rizo" ? OT.rizoLight : OT.brooksLight;
     const txt = seg.remaining > 0 ? `${seg.margin}&${seg.remaining}` : `${seg.margin} UP`;
     return { txt, color, final:true };
@@ -128,7 +128,8 @@ function OMatchCard({ m, onTap }) {
   if (m.status === "upcoming") {
     centerTxt = "—"; centerColor = OT.soft; centerSub = "Upcoming";
   } else if (m.total && m.total.winner) {
-    centerTxt = t.txt; centerColor = t.color;
+    centerTxt = t.txt;
+    centerColor = m.total.winner === "halved" ? OT.goldLight : t.color;
     centerSub = m.total.winner === "halved" ? "All Square" : m.total.winner;
   } else {
     centerTxt = amt === 0 ? "AS" : `${amt} UP`;
@@ -149,7 +150,7 @@ function OMatchCard({ m, onTap }) {
           {m.status==="live" && <span style={{ color:OT.live, fontWeight:700, fontSize:9 }}>● LIVE</span>}
           {m.status==="upcoming" && <span style={{ color:OT.faint }}>UPCOMING</span>}
         </div>
-        <div style={{ fontFamily:OT.mono, fontSize:10, fontWeight:600, color:OT.soft, letterSpacing:"0.04em" }}>
+        <div style={{ fontFamily:OT.mono, fontSize:10, fontWeight:600, color: m.status==="complete" ? centerColor : OT.soft, letterSpacing:"0.04em" }}>
           {m.status==="upcoming" ? "—" : m.thru===18 ? "FINAL" : `THRU ${m.thru}`}
         </div>
       </div>
@@ -177,7 +178,7 @@ function OMatchCard({ m, onTap }) {
             <div key={i} style={{ padding:"8px 6px", textAlign:"center", borderRight:i<2?`1px solid ${OT.rule}`:"none" }}>
               <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.18em", color:OT.faint, marginBottom:3, textTransform:"uppercase" }}>{s.lab}</div>
               <div style={{ fontFamily:OT.serif, fontSize:14, fontWeight:700, color:s.color, letterSpacing:"0" }}><Score v={s.txt} /></div>
-              {s.final && <FinalBadge />}
+              {s.final && <FinalBadge color={s.color} />}
             </div>
           ))}
         </div>
@@ -387,7 +388,7 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
           <div key={i} style={{ padding:"9px 6px", textAlign:"center", borderRight:i<2?`1px solid ${OT.rule}`:"none" }}>
             <div style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.18em", color:OT.faint, marginBottom:3, textTransform:"uppercase" }}>{s.lab}</div>
             <div style={{ fontFamily:OT.serif, fontSize:15, fontWeight:700, color:s.color }}><Score v={s.txt} /></div>
-            {s.final && <FinalBadge />}
+            {s.final && <FinalBadge color={s.color} />}
           </div>
         ))}
       </div>
