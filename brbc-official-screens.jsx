@@ -460,11 +460,9 @@ function OScreenRankings({ D }) {
   });
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
-      <div style={{ padding:"14px 16px 0" }}>
+      <div style={{ padding:"14px 16px 10px" }}>
         <div style={{ fontFamily:OT.serif, fontSize:22, fontWeight:700, color:OT.ink, letterSpacing:"-0.01em" }}>Player Rankings</div>
-        <div style={{ fontFamily:OT.mono, fontSize:10, color:OT.faint, marginTop:4, letterSpacing:"0.1em" }}>{players.length} PLAYERS · RANKED BY WIN PCT</div>
       </div>
-      <OSectionHead>All-Time Match Play</OSectionHead>
       <div style={{ display:"flex", flexDirection:"column", gap:8, padding:"0 16px 24px" }}>
         {players.map((p,i) => {
           const isOpen=open===p.name, isRookie=p.played===0;
