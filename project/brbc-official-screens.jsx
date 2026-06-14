@@ -34,9 +34,9 @@ function Score({ v }) {
 }
 
 // Final badge — small gold "FINAL" tag below a segment score
-function FinalBadge() {
+function FinalBadge({ color }) {
   return (
-    <div style={{ fontFamily: OT.sans, fontSize: 8, fontWeight: 700, letterSpacing: "0.16em", color: OT.goldLight, textAlign: "center", marginTop: 3, textTransform: "uppercase" }}>
+    <div style={{ fontFamily: OT.sans, fontSize: 8, fontWeight: 700, letterSpacing: "0.16em", color: color || OT.goldLight, textAlign: "center", marginTop: 3, textTransform: "uppercase" }}>
       Final
     </div>
   );
@@ -72,7 +72,7 @@ function OHeader() {
       </div>
       <div style={{ padding:"18px 0 18px", textAlign:"center" }}>
         <img
-          src="assets/brbc-logo-new.png"
+          src="assets/ryder-cup-logo.png"
           alt="BRBC Ryder Cup"
           style={{ maxHeight:150, maxWidth:"100%", width:"auto", height:"auto", display:"block", margin:"0 auto" }}
         />
@@ -116,7 +116,7 @@ function OMatchCard({ m, onTap }) {
   const lead = m.lead, amt = m.lead_amt || 0;
   const subVal = seg => {
     if (!seg || !seg.winner) return { txt:"—", color:OT.faint, final:false };
-    if (seg.winner==="halved") return { txt:"AS", color:OT.soft, final:true };
+    if (seg.winner==="halved") return { txt:"AS", color:OT.goldLight, final:true };
     const color = seg.winner==="rizo" ? OT.rizoLight : OT.brooksLight;
     const txt = seg.remaining > 0 ? `${seg.margin}&${seg.remaining}` : `${seg.margin} UP`;
     return { txt, color, final:true };
@@ -128,7 +128,8 @@ function OMatchCard({ m, onTap }) {
   if (m.status === "upcoming") {
     centerTxt = "—"; centerColor = OT.soft; centerSub = "Upcoming";
   } else if (m.total && m.total.winner) {
-    centerTxt = t.txt; centerColor = t.color;
+    centerTxt = t.txt;
+    centerColor = m.total.winner === "halved" ? OT.goldLight : t.color;
     centerSub = m.total.winner === "halved" ? "All Square" : m.total.winner;
   } else {
     centerTxt = amt === 0 ? "AS" : `${amt} UP`;
@@ -149,7 +150,7 @@ function OMatchCard({ m, onTap }) {
           {m.status==="live" && <span style={{ color:OT.live, fontWeight:700, fontSize:9 }}>● LIVE</span>}
           {m.status==="upcoming" && <span style={{ color:OT.faint }}>UPCOMING</span>}
         </div>
-        <div style={{ fontFamily:OT.mono, fontSize:10, fontWeight:600, color:OT.soft, letterSpacing:"0.04em" }}>
+        <div style={{ fontFamily:OT.mono, fontSize:10, fontWeight:600, color: m.status==="complete" ? centerColor : OT.soft, letterSpacing:"0.04em" }}>
           {m.status==="upcoming" ? "—" : m.thru===18 ? "FINAL" : `THRU ${m.thru}`}
         </div>
       </div>
@@ -177,7 +178,7 @@ function OMatchCard({ m, onTap }) {
             <div key={i} style={{ padding:"8px 6px", textAlign:"center", borderRight:i<2?`1px solid ${OT.rule}`:"none" }}>
               <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.18em", color:OT.faint, marginBottom:3, textTransform:"uppercase" }}>{s.lab}</div>
               <div style={{ fontFamily:OT.serif, fontSize:14, fontWeight:700, color:s.color, letterSpacing:"0" }}><Score v={s.txt} /></div>
-              {s.final && <FinalBadge />}
+              {s.final && <FinalBadge color={s.color} />}
             </div>
           ))}
         </div>
@@ -217,40 +218,25 @@ function OScreenScoreboard({ D, onNav }) {
   const r=D.team_rizo.score, b=D.team_brooks.score, max=25, target=12.5;
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
-      <OHeader />
       {/* Score banner */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", padding:"16px 16px 12px", alignItems:"center", borderBottom:`1px solid ${OT.rule}` }}>
-        <div>
+        <div style={{ textAlign:"center" }}>
           <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", color:OT.rizoLight, marginBottom:6 }}>Rizo</div>
           <div style={{ fontFamily:OT.serif, fontSize:58, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo }}>{r}</div>
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
         </div>
-        <div style={{ textAlign:"center", padding:"0 8px" }}>
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={OT.gold} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display:"block", margin:"0 auto 4px" }}>
+        <div style={{ textAlign:"center", padding:"0 12px" }}>
+          <img src="assets/ryder-cup-logo.png" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto 4px" }} />
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={OT.goldLight} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display:"block", margin:"0 auto" }}>
             <path d="M7 4h10v5a5 5 0 0 1-10 0z"/>
             <path d="M5 4H3.5v2A2.5 2.5 0 0 0 6 8.5M19 4h1.5v2A2.5 2.5 0 0 1 18 8.5M9 19h6M12 14v5"/>
           </svg>
-          <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase" }}>First To</div>
-          <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, color:OT.gold, lineHeight:1 }}>{target}</div>
-          <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase" }}>Points</div>
+          <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.14em", color:OT.gold, textTransform:"uppercase", marginTop:2 }}>{target} to win</div>
         </div>
-        <div style={{ textAlign:"right" }}>
+        <div style={{ textAlign:"center" }}>
           <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", color:OT.brooksLight, marginBottom:6 }}>Brooks</div>
           <div style={{ fontFamily:OT.serif, fontSize:58, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks }}>{b}</div>
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_brooks.projected.toFixed(1)}</div>
-        </div>
-      </div>
-      {/* Progress */}
-      <div style={{ padding:"10px 16px 14px", borderBottom:`1px solid ${OT.rule}` }}>
-        <div style={{ position:"relative", height:3, background:OT.rule }}>
-          <div style={{ position:"absolute", top:0, left:0, bottom:0, width:`${(r/max)*100}%`, background:OT.rizoLight }}></div>
-          <div style={{ position:"absolute", top:0, right:0, bottom:0, width:`${(b/max)*100}%`, background:OT.brooksLight }}></div>
-          <div style={{ position:"absolute", top:-3, left:`${(target/max)*100}%`, width:1, height:9, background:OT.goldLight, transform:"translateX(-0.5px)" }}></div>
-        </div>
-        <div style={{ display:"flex", justifyContent:"space-between", marginTop:7, fontFamily:OT.serif, fontSize:10, fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase" }}>
-          <span style={{ color:OT.rizoLight, fontFamily:OT.serif }}>Rizo</span>
-          <span style={{ color:OT.gold, fontFamily:OT.sans, fontSize:10, fontWeight:600 }}>{target} to win</span>
-          <span style={{ color:OT.brooksLight, fontFamily:OT.serif }}>Brooks</span>
         </div>
       </div>
       {live.length > 0 && <>
@@ -328,7 +314,7 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
       const txt = clinched.remaining > 0 ? `${clinched.up}&${clinched.remaining}` : `${clinched.up} UP`;
       return { txt, color, final:true };
     }
-    if (d === 0 && s.played === holeCount) return { txt:"AS", color:OT.soft, final:true };
+    if (d === 0 && s.played === holeCount) return { txt:"AS", color:OT.goldLight, final:true };
     if (d === 0) return { txt:"AS", color:OT.soft, final:false };
     return { txt:`${Math.abs(d)} UP`, color: d>0?OT.rizoLight:OT.brooksLight, final: s.played === holeCount };
   };
@@ -373,7 +359,7 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
         </div>
         <div style={{ textAlign:"center", minWidth:86 }}>
           <div style={{ fontFamily:OT.serif, fontSize:38, fontWeight:600, lineHeight:1, color:heroColor, letterSpacing:"-0.02em" }}><Score v={heroTxt} /></div>
-          <div style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.2em", color:OT.faint, marginTop:2, textTransform:"uppercase" }}>
+          <div style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.2em", color:thru===18 ? heroColor : OT.faint, marginTop:2, textTransform:"uppercase" }}>
             {thru===0?"Not Started":thru===18?"Final":`Thru ${thru}`}
           </div>
         </div>
@@ -387,7 +373,7 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
           <div key={i} style={{ padding:"9px 6px", textAlign:"center", borderRight:i<2?`1px solid ${OT.rule}`:"none" }}>
             <div style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.18em", color:OT.faint, marginBottom:3, textTransform:"uppercase" }}>{s.lab}</div>
             <div style={{ fontFamily:OT.serif, fontSize:15, fontWeight:700, color:s.color }}><Score v={s.txt} /></div>
-            {s.final && <FinalBadge />}
+            {s.final && <FinalBadge color={s.color} />}
           </div>
         ))}
       </div>
@@ -536,12 +522,8 @@ function OScreenHistory({ D }) {
   const brooksW = D.hall_of_champions.filter(c=>c.winner==="Brooks").length;
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
-      <div style={{ padding:"16px 16px 10px", textAlign:"center" }}>
-        <div style={{ fontFamily:OT.serif, fontSize:26, fontWeight:700, color:OT.ink, letterSpacing:"-0.01em" }}>Hall of Champions</div>
-        <div style={{ fontFamily:OT.mono, fontSize:10, color:OT.faint, marginTop:4, letterSpacing:"0.1em" }}>{D.hall_of_champions.length} EDITIONS · EST. 2024</div>
-      </div>
       {/* Series */}
-      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", margin:"0 16px 4px", borderTop:`1px solid ${OT.rule}`, borderBottom:`1px solid ${OT.rule}`, padding:"14px 12px" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", margin:"16px 16px 4px", borderTop:`1px solid ${OT.rule}`, borderBottom:`1px solid ${OT.rule}`, padding:"14px 12px" }}>
         <div style={{ textAlign:"center" }}>
           <div style={{ fontFamily:OT.serif, fontSize:12, fontWeight:700, letterSpacing:"0.18em", color:OT.rizoLight, textTransform:"uppercase" }}>Rizo</div>
           <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.9, color:OT.rizo }}>{rizoW}</div>
@@ -599,14 +581,9 @@ function OScreenRules() {
   const rules = [
     { title:"Match Play Format", body:"All matches are played in match play format. Each hole is won, lost, or halved. The player or team that wins the most holes wins the match." },
     { title:"Scoring", body:"Each match is worth up to 3 points — 1 for the front 9, 1 for the back 9, and 1 for the overall 18-hole result. The first team to 12.5 points wins the Cup." },
-    { title:"Handicaps", body:"Handicap strokes are applied on a per-hole basis using the course's stroke index. The lower-handicap player in each pair plays at scratch; the higher-handicap player receives the difference." },
-    { title:"Alternate Shot (Foursomes)", body:"Partners alternate hitting the same ball. One partner tees off on odd holes, the other on even holes. A missed stroke still counts and the partner plays the next shot." },
-    { title:"Concessions", body:"Putts, holes, or matches may be conceded at any time. A conceded putt cannot be refused. Conceded strokes count in the score but are not holed out." },
-    { title:"Pace of Play", body:"Groups are expected to maintain a ready-golf pace. A group falling more than one hole behind the group ahead may be placed on the clock by tournament officials." },
-    { title:"Out of Bounds & Lost Ball", body:"Standard USGA rules apply. A ball that is out of bounds or lost (not found within 3 minutes) incurs a stroke-and-distance penalty." },
-    { title:"Unplayable Lie", body:"A player may declare their ball unplayable anywhere on the course (except in a penalty area). The player takes a one-stroke penalty and chooses from three relief options." },
-    { title:"Disputes & Rulings", body:"Any dispute should be raised immediately. Play a second ball if possible. Tournament officials have final authority on all rulings. Good sportsmanship is expected at all times." },
-    { title:"Spirit of the Game", body:"The BRBC Ryder Cup is a competition among friends. Respect your fellow competitors, the course, and the spirit of the game. May the best team win." },
+    { title:"Concessions", body:"Putts, holes, or matches may be conceded at any time." },
+    { title:"Local Rules", body:"USGA rules apply. Play the ball up in the fairway. Scramble format — 1 club length drop allowed without changing your lie." },
+    { title:"Spirit of the Game", body:"Don't be a jackass. Respect your fellow competitors, the course, and the game. Any dispute should be raised immediately — tournament officials have final say. May the best team win." },
   ];
   return (
     <div style={{ flex:1, overflowY:"auto" }}>

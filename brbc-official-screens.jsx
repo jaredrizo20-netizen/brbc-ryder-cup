@@ -522,12 +522,8 @@ function OScreenHistory({ D }) {
   const brooksW = D.hall_of_champions.filter(c=>c.winner==="Brooks").length;
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
-      <div style={{ padding:"16px 16px 10px", textAlign:"center" }}>
-        <div style={{ fontFamily:OT.serif, fontSize:26, fontWeight:700, color:OT.ink, letterSpacing:"-0.01em" }}>Hall of Champions</div>
-        <div style={{ fontFamily:OT.mono, fontSize:10, color:OT.faint, marginTop:4, letterSpacing:"0.1em" }}>{D.hall_of_champions.length} EDITIONS · EST. 2024</div>
-      </div>
       {/* Series */}
-      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", margin:"0 16px 4px", borderTop:`1px solid ${OT.rule}`, borderBottom:`1px solid ${OT.rule}`, padding:"14px 12px" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", margin:"16px 16px 4px", borderTop:`1px solid ${OT.rule}`, borderBottom:`1px solid ${OT.rule}`, padding:"14px 12px" }}>
         <div style={{ textAlign:"center" }}>
           <div style={{ fontFamily:OT.serif, fontSize:12, fontWeight:700, letterSpacing:"0.18em", color:OT.rizoLight, textTransform:"uppercase" }}>Rizo</div>
           <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.9, color:OT.rizo }}>{rizoW}</div>
