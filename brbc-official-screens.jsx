@@ -237,38 +237,23 @@ function OScreenScoreboard({ D, onNav }) {
   const r=D.team_rizo.score, b=D.team_brooks.score, target=15.5;
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
-      {/* Crest / wordmark header */}
-      <div style={{ background:OT.bg, borderBottom:`1px solid ${OT.rule}`, padding:"14px 20px 10px" }}>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center" }}>
+      {/* Score header — Rizo | Logo | Brooks */}
+      <div style={{ background:OT.bg, borderBottom:`1px solid ${OT.rule}`, padding:"14px 16px 12px" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", gap:8 }}>
           <div style={{ textAlign:"left" }}>
-            <div style={{ fontFamily:OT.serif, fontSize:24, fontWeight:700, color:OT.ink, lineHeight:1 }}>III</div>
-            <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase", marginTop:1 }}>Edition</div>
+            <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.rizoLight, lineHeight:1, marginBottom:4 }}>Rizo</div>
+            <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo }}>{r}</div>
+            <div style={{ fontFamily:OT.mono, fontSize:8, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
           </div>
-          <img src="assets/ryder-cup-logo.png" alt="BRBC" style={{ width:110, height:"auto", display:"block", margin:"0 auto" }} />
+          <div style={{ textAlign:"center" }}>
+            <img src="assets/ryder-cup-logo.png" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto", mixBlendMode:"multiply" }} />
+            <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.14em", color:OT.gold, textTransform:"uppercase", marginTop:4 }}>{target} to win</div>
+          </div>
           <div style={{ textAlign:"right" }}>
-            <div style={{ fontFamily:OT.serif, fontSize:24, fontWeight:700, color:OT.ink, lineHeight:1 }}>2024</div>
-            <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase", marginTop:1 }}>Est.</div>
+            <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.brooksLight, lineHeight:1, marginBottom:4 }}>Brooks</div>
+            <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks }}>{b}</div>
+            <div style={{ fontFamily:OT.mono, fontSize:8, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_brooks.projected.toFixed(1)}</div>
           </div>
-        </div>
-      </div>
-      {/* Score banner */}
-      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", padding:"16px 16px 12px", alignItems:"center", borderBottom:`1px solid ${OT.rule}`, background:OT.surface }}>
-        <div style={{ textAlign:"center" }}>
-          <div style={{ fontFamily:OT.serif, fontSize:26, fontWeight:700, letterSpacing:"0.04em", color:OT.rizoLight, marginBottom:6 }}>Rizo</div>
-          <div style={{ fontFamily:OT.serif, fontSize:60, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo }}>{r}</div>
-          <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
-        </div>
-        <div style={{ textAlign:"center", padding:"0 10px" }}>
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke={OT.goldLight} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display:"block", margin:"0 auto 4px" }}>
-            <path d="M7 4h10v5a5 5 0 0 1-10 0z"/>
-            <path d="M5 4H3.5v2A2.5 2.5 0 0 0 6 8.5M19 4h1.5v2A2.5 2.5 0 0 1 18 8.5M9 19h6M12 14v5"/>
-          </svg>
-          <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.14em", color:OT.gold, textTransform:"uppercase" }}>{target} to win</div>
-        </div>
-        <div style={{ textAlign:"center" }}>
-          <div style={{ fontFamily:OT.serif, fontSize:26, fontWeight:700, letterSpacing:"0.04em", color:OT.brooksLight, marginBottom:6 }}>Brooks</div>
-          <div style={{ fontFamily:OT.serif, fontSize:60, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks }}>{b}</div>
-          <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_brooks.projected.toFixed(1)}</div>
         </div>
       </div>
       {live.length > 0 && <>
@@ -316,9 +301,13 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
 
   const [holes, setHoles] = React.useState(() => buildHoles(live.holes[m.id]));
 
-  React.useEffect(() => {
-    setHoles(buildHoles(live.holes[m.id]));
-  }, [live.holes[m.id], m.id]);
+  // Intentionally no useEffect syncing live.holes → holes here.
+  // Syncing back from Firebase caused visual re-fills: intermediate Firebase
+  // "value" events (fired per-hole during a multi-hole clear) would overwrite
+  // the user's local cleared state before all removes had propagated.
+  // The useState initializer captures the current Firebase state on mount;
+  // key={selectedMatch} in App ensures a fresh mount (and fresh read) whenever
+  // the user navigates away and back to any match.
 
   const setHole = (n, v) => {
     setHoles(prev => {
@@ -526,7 +515,7 @@ function OScreenRankings({ D }) {
             <div key={p.name} style={{ border:`1px solid ${OT.rule}`, background:OT.bg, cursor:"pointer" }} onClick={() => setOpen(isOpen?null:p.name)}>
               <div style={{ display:"grid", gridTemplateColumns:"28px 36px 1fr auto", alignItems:"center", gap:9, padding:"11px 12px" }}>
                 <div style={{ fontFamily:OT.serif, fontSize:15, fontWeight:600, color:OT.faint, textAlign:"center" }}>
-                  {isRookie ? <span style={{ fontSize:9, fontWeight:700, letterSpacing:"0.1em", color:OT.goldLight }}>NEW</span> : i+1}
+                  {i+1}
                 </div>
                 <div style={{ width:36, height:36, borderRadius:"50%", background:teamColor, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:OT.serif, fontSize:13, fontWeight:700, color:"#fff", flexShrink:0 }}>{initials(p.name)}</div>
                 <div>
@@ -555,7 +544,7 @@ function OScreenRankings({ D }) {
               {isOpen && (
                 <div style={{ borderTop:`1px solid ${OT.rule}`, padding:"12px", background:OT.surface }}>
                   <div style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", border:`1px solid ${OT.rule}`, marginBottom:10, background:OT.bg }}>
-                    {[{l:"Played",v:p.played||"—"},{l:"Wins",v:p.w||"—"},{l:"Losses",v:p.l||"—"},{l:"Halved",v:p.h||"—"},{l:"Cups",v:p.cups||"—"},{l:"HCP",v:p.hcp.toFixed(1)}].map((s,idx) => (
+                    {[{l:"Played",v:p.played||"—"},{l:"Wins",v:p.w||"—"},{l:"Losses",v:p.l||"—"},{l:"Halved",v:p.h||"—"},{l:"Cups",v:p.cups||"—"},{l:"HCP",v:p.hcp!=null?p.hcp.toFixed(1):"—"}].map((s,idx) => (
                       <div key={s.l} style={{ padding:"7px 4px", textAlign:"center", borderRight:idx<5?`1px solid ${OT.rule}`:"none" }}>
                         <div style={{ fontFamily:OT.serif, fontSize:15, fontWeight:700, color:OT.ink }}>{s.v}</div>
                         <div style={{ fontFamily:OT.serif, fontSize:8, fontWeight:700, letterSpacing:"0.14em", color:OT.faint, textTransform:"uppercase", marginTop:2 }}>{s.l}</div>
