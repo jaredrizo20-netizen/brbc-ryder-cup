@@ -9,16 +9,16 @@ window.BRBC_DATA = {
 
   // 10 matches × 3 pts each = 30 pts total; 15.5 to win
   matches: [
-    { id:"m1",  time:"8:00 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m2",  time:"8:10 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m3",  time:"8:20 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m4",  time:"8:30 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m5",  time:"8:40 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m6",  time:"8:50 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m7",  time:"9:00 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m8",  time:"9:10 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m9",  time:"9:20 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m10", time:"9:30 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m1",  time:"8:30 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m2",  time:"8:40 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m3",  time:"8:50 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m4",  time:"9:00 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m5",  time:"9:10 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m6",  time:"9:20 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m7",  time:"9:30 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m8",  time:"9:40 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m9",  time:"9:50 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m10", time:"10:00 AM", tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
   ],
 
   team_rizo: {
