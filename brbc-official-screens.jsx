@@ -3,25 +3,25 @@
 
 // ─── Token palette ───────────────────────────────────────────────
 const OT = {
-  bg:          "#FFFFFF",
-  surface:     "#F7F7F9",
-  ink:         "#0A0E1A",
-  soft:        "#464B5E",
-  faint:       "#9096AA",
-  rule:        "#EAEBF0",
-  ruleStrong:  "#D4D5DE",
-  rizo:        "#0F2B6B",
-  rizoLight:   "#1A3FA8",
-  rizoTint:    "#F0F3FB",
-  brooks:      "#7A1214",
-  brooksLight: "#A31B1E",
-  brooksTint:  "#FBF0F0",
-  gold:        "#8A6A18",
-  goldLight:   "#B88C20",
+  bg:          "#F5F1E6",
+  surface:     "#EDE9DA",
+  ink:         "#0E1320",
+  soft:        "#3D4354",
+  faint:       "#7E8393",
+  rule:        "rgba(14,19,32,0.12)",
+  ruleStrong:  "rgba(14,19,32,0.22)",
+  rizo:        "#1C2F5E",
+  rizoLight:   "#253D78",
+  rizoTint:    "#E4EBF6",
+  brooks:      "#7B2F22",
+  brooksLight: "#963628",
+  brooksTint:  "#F5E9E7",
+  gold:        "#9A7220",
+  goldLight:   "#BF9128",
   live:        "#16A34A",
-  serif: "EB Garamond,Georgia,serif",
+  serif: "'Playfair Display',Georgia,serif",
   sans:  "Inter,system-ui,sans-serif",
-  mono:  "JetBrains Mono,ui-monospace,monospace",
+  mono:  "'JetBrains Mono',ui-monospace,monospace",
 };
 
 // Renders a score like "5&4" with the & in a plain sans-serif font
@@ -65,17 +65,25 @@ function clinchLocal(holes, lo, hi) {
 function OHeader() {
   return (
     <div style={{ background:OT.bg, borderBottom:`1px solid ${OT.rule}` }}>
-      <div style={{ height:4, display:"grid", gridTemplateColumns:"1fr 1fr 1fr" }}>
+      <div style={{ height:3, display:"grid", gridTemplateColumns:"1fr 1fr 1fr" }}>
         <div style={{ background:OT.rizoLight }}></div>
-        <div style={{ background:"#C9A84C" }}></div>
+        <div style={{ background:OT.goldLight }}></div>
         <div style={{ background:OT.brooksLight }}></div>
       </div>
-      <div style={{ padding:"18px 0 18px", textAlign:"center" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", padding:"16px 20px 16px" }}>
+        <div style={{ textAlign:"left" }}>
+          <div style={{ fontFamily:OT.serif, fontSize:22, fontWeight:700, color:OT.ink, letterSpacing:"-0.01em", lineHeight:1 }}>III</div>
+          <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase", marginTop:2 }}>Edition</div>
+        </div>
         <img
           src="assets/ryder-cup-logo.png"
           alt="BRBC Ryder Cup"
-          style={{ maxHeight:150, maxWidth:"100%", width:"auto", height:"auto", display:"block", margin:"0 auto" }}
+          style={{ maxHeight:130, maxWidth:"100%", width:"auto", height:"auto", display:"block", margin:"0 auto" }}
         />
+        <div style={{ textAlign:"right" }}>
+          <div style={{ fontFamily:OT.serif, fontSize:22, fontWeight:700, color:OT.ink, letterSpacing:"-0.01em", lineHeight:1 }}>2024</div>
+          <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase", marginTop:2 }}>Est.</div>
+        </div>
       </div>
     </div>
   );
@@ -100,13 +108,20 @@ function ONav({ active, onNav }) {
     { id:"rules",      label:"Rules"       },
   ];
   return (
-    <div style={{ display:"grid", gridTemplateColumns:`repeat(${items.length},1fr)`, background:OT.bg, borderBottom:`1px solid ${OT.rule}`, paddingTop:"env(safe-area-inset-top,0px)" }}>
-      {items.map(it => (
-        <button key={it.id} onClick={() => onNav(it.id)} style={{ padding:"11px 0", background:"none", border:"none", cursor:"pointer", color: active===it.id ? OT.rizoLight : OT.faint, position:"relative" }}>
-          {active===it.id && <div style={{ position:"absolute", bottom:0, left:"50%", transform:"translateX(-50%)", width:24, height:2, background:OT.rizoLight }}></div>}
-          <span style={{ fontFamily:OT.sans, fontSize:9, fontWeight: active===it.id ? 700 : 500, letterSpacing:"0.12em", textTransform:"uppercase" }}>{it.label}</span>
-        </button>
-      ))}
+    <div style={{ background:OT.bg, borderBottom:`1px solid ${OT.rule}`, paddingTop:"env(safe-area-inset-top,0px)" }}>
+      <div style={{ height:3, display:"grid", gridTemplateColumns:"1fr 1fr 1fr" }}>
+        <div style={{ background:OT.rizoLight }}></div>
+        <div style={{ background:OT.goldLight }}></div>
+        <div style={{ background:OT.brooksLight }}></div>
+      </div>
+      <div style={{ display:"grid", gridTemplateColumns:`repeat(${items.length},1fr)` }}>
+        {items.map(it => (
+          <button key={it.id} onClick={() => onNav(it.id)} style={{ padding:"11px 0", background:"none", border:"none", cursor:"pointer", color: active===it.id ? OT.ink : OT.faint, position:"relative" }}>
+            {active===it.id && <div style={{ position:"absolute", bottom:0, left:"50%", transform:"translateX(-50%)", width:24, height:2, background:OT.goldLight }}></div>}
+            <span style={{ fontFamily:OT.sans, fontSize:9, fontWeight: active===it.id ? 700 : 500, letterSpacing:"0.12em", textTransform:"uppercase" }}>{it.label}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -121,29 +136,33 @@ function OMatchCard({ m, onTap }) {
     const txt = seg.remaining > 0 ? `${seg.margin}&${seg.remaining}` : `${seg.margin} UP`;
     return { txt, color, final:true };
   };
-  const f=subVal(m.front), ba=subVal(m.back), t=subVal(m.total);
+  const subValPrefixed = seg => {
+    if (!seg || !seg.winner) return { txt:"—", color:OT.faint, final:false };
+    if (seg.winner==="halved") return { txt:"AS", color:OT.goldLight, final:true };
+    const color = seg.winner==="rizo" ? OT.rizoLight : OT.brooksLight;
+    const prefix = seg.winner==="rizo" ? "R · " : "B · ";
+    const score = seg.remaining > 0 ? `${seg.margin}&${seg.remaining}` : `${seg.margin} UP`;
+    return { txt: prefix + score, color, final:true };
+  };
+  const f=subValPrefixed(m.front), ba=subValPrefixed(m.back), t=subValPrefixed(m.total);
 
   // Center score: use clinch format when decided, live lead otherwise
   let centerTxt, centerColor, centerSub;
   if (m.status === "upcoming") {
     centerTxt = "—"; centerColor = OT.soft; centerSub = "Upcoming";
   } else if (m.total && m.total.winner) {
-    centerTxt = t.txt;
-    centerColor = m.total.winner === "halved" ? OT.goldLight : t.color;
-    centerSub = m.total.winner === "halved" ? "All Square" : m.total.winner;
+    centerTxt = m.total.winner === "halved" ? "AS" : (m.total.winner === "rizo" ? "Rizo" : "Brooks");
+    centerColor = m.total.winner === "halved" ? OT.goldLight : (m.total.winner === "rizo" ? OT.rizoLight : OT.brooksLight);
+    centerSub = m.total.winner === "halved" ? "All Square" : t.txt.replace(/^[RB] · /, "");
   } else {
     centerTxt = amt === 0 ? "AS" : `${amt} UP`;
     centerColor = lead==="rizo" ? OT.rizoLight : lead==="brooks" ? OT.brooksLight : OT.soft;
-    centerSub = lead ? lead : "All Square";
+    centerSub = lead==="rizo" ? "Rizo" : lead==="brooks" ? "Brooks" : "All Square";
   }
 
-  const borderColor = lead==="rizo" ? OT.rizoLight : lead==="brooks" ? OT.brooksLight : OT.rule;
+  const accentColor = lead==="rizo" ? OT.rizoLight : lead==="brooks" ? OT.brooksLight : m.status==="complete" ? OT.goldLight : OT.ruleStrong;
   return (
-    <div onClick={() => onTap && onTap(m.id)} style={{ background:OT.bg, border:`1px solid ${OT.rule}`, borderLeft:`2px solid ${borderColor}`, cursor: onTap ? "pointer" : "default" }}>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", height:2 }}>
-        <div style={{ background:OT.rizoLight, opacity:0.4 }}></div>
-        <div style={{ background:OT.brooksLight, opacity:0.4 }}></div>
-      </div>
+    <div onClick={() => onTap && onTap(m.id)} style={{ background:OT.bg, border:`1px solid ${OT.rule}`, borderLeft:`3px solid ${accentColor}`, cursor: onTap ? "pointer" : "default" }}>
       <div style={{ display:"flex", justifyContent:"space-between", padding:"8px 12px", background:OT.surface, borderBottom:`1px solid ${OT.rule}` }}>
         <div style={{ fontFamily:OT.sans, fontSize:10, fontWeight:600, letterSpacing:"0.16em", color:OT.faint, textTransform:"uppercase", display:"flex", alignItems:"center", gap:8 }}>
           {m.time}
@@ -174,10 +193,10 @@ function OMatchCard({ m, onTap }) {
       </div>
       {m.status !== "upcoming" && (
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", borderTop:`1px solid ${OT.rule}`, background:OT.surface }}>
-          {[{lab:"Front 9",...f},{lab:"Back 9",...ba},{lab:"Total",...t}].map((s,i) => (
-            <div key={i} style={{ padding:"8px 6px", textAlign:"center", borderRight:i<2?`1px solid ${OT.rule}`:"none" }}>
-              <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.18em", color:OT.faint, marginBottom:3, textTransform:"uppercase" }}>{s.lab}</div>
-              <div style={{ fontFamily:OT.serif, fontSize:14, fontWeight:700, color:s.color, letterSpacing:"0" }}><Score v={s.txt} /></div>
+          {[{lab:"F9",...f},{lab:"B9",...ba},{lab:"18",...t}].map((s,i) => (
+            <div key={i} style={{ padding:"8px 4px", textAlign:"center", borderRight:i<2?`1px solid ${OT.rule}`:"none" }}>
+              <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:700, letterSpacing:"0.18em", color:OT.faint, marginBottom:3, textTransform:"uppercase" }}>{s.lab}</div>
+              <div style={{ fontFamily:OT.sans, fontSize:11, fontWeight:700, color:s.color, letterSpacing:"0" }}>{s.txt}</div>
               {s.final && <FinalBadge color={s.color} />}
             </div>
           ))}
@@ -215,27 +234,40 @@ function OScreenScoreboard({ D, onNav }) {
   const live = D.matches.filter(m => m.status==="live");
   const upcoming = D.matches.filter(m => m.status==="upcoming");
   const complete = D.matches.filter(m => m.status==="complete");
-  const r=D.team_rizo.score, b=D.team_brooks.score, max=25, target=12.5;
+  const r=D.team_rizo.score, b=D.team_brooks.score, target=15.5;
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
+      {/* Crest / wordmark header */}
+      <div style={{ background:OT.bg, borderBottom:`1px solid ${OT.rule}`, padding:"14px 20px 10px" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center" }}>
+          <div style={{ textAlign:"left" }}>
+            <div style={{ fontFamily:OT.serif, fontSize:24, fontWeight:700, color:OT.ink, lineHeight:1 }}>III</div>
+            <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase", marginTop:1 }}>Edition</div>
+          </div>
+          <img src="assets/ryder-cup-logo.png" alt="BRBC" style={{ width:110, height:"auto", display:"block", margin:"0 auto" }} />
+          <div style={{ textAlign:"right" }}>
+            <div style={{ fontFamily:OT.serif, fontSize:24, fontWeight:700, color:OT.ink, lineHeight:1 }}>2024</div>
+            <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase", marginTop:1 }}>Est.</div>
+          </div>
+        </div>
+      </div>
       {/* Score banner */}
-      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", padding:"16px 16px 12px", alignItems:"center", borderBottom:`1px solid ${OT.rule}` }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", padding:"16px 16px 12px", alignItems:"center", borderBottom:`1px solid ${OT.rule}`, background:OT.surface }}>
         <div style={{ textAlign:"center" }}>
-          <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", color:OT.rizoLight, marginBottom:6 }}>Rizo</div>
-          <div style={{ fontFamily:OT.serif, fontSize:58, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo }}>{r}</div>
+          <div style={{ fontFamily:OT.serif, fontSize:26, fontWeight:700, letterSpacing:"0.04em", color:OT.rizoLight, marginBottom:6 }}>Rizo</div>
+          <div style={{ fontFamily:OT.serif, fontSize:60, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo }}>{r}</div>
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
         </div>
-        <div style={{ textAlign:"center", padding:"0 12px" }}>
-          <img src="assets/ryder-cup-logo.png" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto 4px" }} />
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={OT.goldLight} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display:"block", margin:"0 auto" }}>
+        <div style={{ textAlign:"center", padding:"0 10px" }}>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke={OT.goldLight} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display:"block", margin:"0 auto 4px" }}>
             <path d="M7 4h10v5a5 5 0 0 1-10 0z"/>
             <path d="M5 4H3.5v2A2.5 2.5 0 0 0 6 8.5M19 4h1.5v2A2.5 2.5 0 0 1 18 8.5M9 19h6M12 14v5"/>
           </svg>
-          <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.14em", color:OT.gold, textTransform:"uppercase", marginTop:2 }}>{target} to win</div>
+          <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.14em", color:OT.gold, textTransform:"uppercase" }}>{target} to win</div>
         </div>
         <div style={{ textAlign:"center" }}>
-          <div style={{ fontFamily:OT.serif, fontSize:28, fontWeight:700, letterSpacing:"0.06em", textTransform:"uppercase", color:OT.brooksLight, marginBottom:6 }}>Brooks</div>
-          <div style={{ fontFamily:OT.serif, fontSize:58, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks }}>{b}</div>
+          <div style={{ fontFamily:OT.serif, fontSize:26, fontWeight:700, letterSpacing:"0.04em", color:OT.brooksLight, marginBottom:6 }}>Brooks</div>
+          <div style={{ fontFamily:OT.serif, fontSize:60, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks }}>{b}</div>
           <div style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_brooks.projected.toFixed(1)}</div>
         </div>
       </div>
@@ -390,8 +422,8 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
         {/* Front 9 */}
         {Array.from({length:9},(_,i)=>i+1).map(n => <HoleRow key={n} n={n} />)}
         {/* Turn banner */}
-        <div style={{ background:OT.ink, color:OT.bg, textAlign:"center", padding:"5px 0", fontFamily:OT.serif, fontSize:10, fontWeight:700, letterSpacing:"0.32em", textTransform:"uppercase" }}>
-          Turn · Front 9 · <Score v={fL.txt} />
+        <div style={{ background:OT.ink, color:OT.bg, textAlign:"center", padding:"5px 0", fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.28em", textTransform:"uppercase" }}>
+          Turn · Front 9 · {fL.txt}
         </div>
         {/* Back 9 */}
         {Array.from({length:9},(_,i)=>i+10).map(n => <HoleRow key={n} n={n} />)}
@@ -404,40 +436,56 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
 // ─── SCREEN: Teams ───────────────────────────────────────────────
 function OScreenTeams({ D }) {
   const initials = n => n.split(" ").map(s=>s[0]).join("").slice(0,2);
+  const isDraftPending = !D.team_rizo.roster.length && !D.team_brooks.roster.length;
+
   const RosterRow = ({ p, team }) => (
     <div style={{ display:"grid", gridTemplateColumns:"36px 1fr auto", gap:10, alignItems:"center", padding:"10px 16px", borderBottom:`1px solid ${OT.rule}` }}>
       <div style={{ width:36, height:36, borderRadius:"50%", background: team==="rizo"?OT.rizoLight:OT.brooksLight, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:OT.serif, fontSize:14, fontWeight:700, color:"#fff", flexShrink:0 }}>{initials(p.name)}</div>
       <div>
         <div style={{ fontFamily:OT.serif, fontSize:17, fontWeight:700, color:OT.ink, letterSpacing:"-0.01em" }}>{p.name}</div>
-        <div style={{ fontFamily:OT.serif, fontSize:10, fontWeight:700, letterSpacing:"0.16em", color:OT.faint, textTransform:"uppercase", marginTop:1 }}>{p.role} · HCP {p.hcp}</div>
+        <div style={{ fontFamily:OT.sans, fontSize:10, fontWeight:700, letterSpacing:"0.16em", color:OT.faint, textTransform:"uppercase", marginTop:1 }}>{p.role}{p.hcp > 0 ? ` · HCP ${p.hcp}` : ""}</div>
       </div>
-      <div style={{ display:"flex", gap:10, fontFamily:OT.mono, fontSize:11, color:OT.soft, textAlign:"right" }}>
+      <div style={{ display:"flex", gap:10, textAlign:"right" }}>
         {[{v:p.w,l:"W"},{v:p.l,l:"L"},{v:p.h,l:"H"}].map(s => (
           <div key={s.l}>
             <div style={{ fontFamily:OT.serif, fontSize:18, fontWeight:700, color:OT.ink, display:"block", textAlign:"center" }}>{s.v}</div>
-            <div style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:OT.faint, textAlign:"center" }}>{s.l}</div>
+            <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:OT.faint, textAlign:"center" }}>{s.l}</div>
           </div>
         ))}
       </div>
     </div>
   );
+
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
       <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", padding:"14px 16px", alignItems:"center", borderBottom:`1px solid ${OT.rule}` }}>
         <div>
           <div style={{ fontFamily:OT.serif, fontSize:12, fontWeight:700, letterSpacing:"0.2em", color:OT.rizoLight, textTransform:"uppercase" }}>Team Rizo</div>
-          <div style={{ fontFamily:OT.serif, fontSize:13, fontWeight:600, color:OT.soft, marginTop:2, letterSpacing:"0.06em" }}>Capt. {D.team_rizo.captain}</div>
+          <div style={{ fontFamily:OT.sans, fontSize:12, fontWeight:600, color:OT.soft, marginTop:2 }}>Capt. {D.team_rizo.captain}</div>
         </div>
-        <div style={{ fontFamily:OT.serif, fontSize:20, color:OT.gold, padding:"0 10px" }}>vs</div>
+        <div style={{ fontFamily:OT.serif, fontSize:20, fontStyle:"italic", color:OT.gold, padding:"0 10px" }}>vs</div>
         <div style={{ textAlign:"right" }}>
           <div style={{ fontFamily:OT.serif, fontSize:12, fontWeight:700, letterSpacing:"0.2em", color:OT.brooksLight, textTransform:"uppercase" }}>Team Brooks</div>
-          <div style={{ fontFamily:OT.serif, fontSize:13, fontWeight:600, color:OT.soft, marginTop:2, letterSpacing:"0.06em" }}>Capt. {D.team_brooks.captain}</div>
+          <div style={{ fontFamily:OT.sans, fontSize:12, fontWeight:600, color:OT.soft, marginTop:2 }}>Capt. {D.team_brooks.captain}</div>
         </div>
       </div>
-      <OSectionHead>Team Rizo</OSectionHead>
-      {D.team_rizo.roster.map(p => <RosterRow key={p.name} p={p} team="rizo" />)}
-      <OSectionHead>Team Brooks</OSectionHead>
-      {D.team_brooks.roster.map(p => <RosterRow key={p.name} p={p} team="brooks" />)}
+
+      {isDraftPending ? (
+        <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"60px 32px", gap:16 }}>
+          <div style={{ fontFamily:OT.serif, fontSize:32, color:OT.ruleStrong, textAlign:"center" }}>⚑</div>
+          <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.ink, textAlign:"center" }}>Draft Pending</div>
+          <div style={{ fontFamily:OT.sans, fontSize:13, color:OT.faint, textAlign:"center", lineHeight:1.6 }}>
+            Team rosters will appear here once the draft is complete. Check Rankings to see all 40 players.
+          </div>
+        </div>
+      ) : (
+        <>
+          <OSectionHead>Team Rizo</OSectionHead>
+          {D.team_rizo.roster.map(p => <RosterRow key={p.name} p={p} team="rizo" />)}
+          <OSectionHead>Team Brooks</OSectionHead>
+          {D.team_brooks.roster.map(p => <RosterRow key={p.name} p={p} team="brooks" />)}
+        </>
+      )}
       <div style={{ height:24 }}></div>
     </div>
   );
@@ -447,10 +495,17 @@ function OScreenTeams({ D }) {
 function OScreenRankings({ D }) {
   const [open, setOpen] = React.useState(null);
   const initials = n => n.split(" ").map(s=>s[0]).join("").slice(0,2);
-  const players = [
-    ...D.team_rizo.roster.map(p=>({...p,team:"rizo"})),
-    ...D.team_brooks.roster.map(p=>({...p,team:"brooks"})),
-  ].map(p => {
+
+  // Use undrafted pool if teams aren't set yet, otherwise merge rosters
+  const isDraftPending = D.undrafted && D.undrafted.length > 0;
+  const rawPlayers = isDraftPending
+    ? D.undrafted.map(p => ({...p, team: null}))
+    : [
+        ...D.team_rizo.roster.map(p=>({...p,team:"rizo"})),
+        ...D.team_brooks.roster.map(p=>({...p,team:"brooks"})),
+      ];
+
+  const players = rawPlayers.map(p => {
     const played=p.w+p.l+p.h, pts=p.w+p.h*0.5, pct=played>0?pts/played:0;
     return {...p,played,pts,pct};
   }).sort((a,b) => {
@@ -465,8 +520,8 @@ function OScreenRankings({ D }) {
       </div>
       <div style={{ display:"flex", flexDirection:"column", gap:8, padding:"0 16px 24px" }}>
         {players.map((p,i) => {
-          const isOpen=open===p.name, isRookie=p.played===0;
-          const teamColor=p.team==="rizo"?OT.rizoLight:OT.brooksLight;
+          const isOpen=open===p.name, isRookie=p.appearances===0;
+          const teamColor = p.team==="rizo" ? OT.rizoLight : p.team==="brooks" ? OT.brooksLight : OT.ink;
           return (
             <div key={p.name} style={{ border:`1px solid ${OT.rule}`, background:OT.bg, cursor:"pointer" }} onClick={() => setOpen(isOpen?null:p.name)}>
               <div style={{ display:"grid", gridTemplateColumns:"28px 36px 1fr auto", alignItems:"center", gap:9, padding:"11px 12px" }}>
@@ -477,8 +532,12 @@ function OScreenRankings({ D }) {
                 <div>
                   <div style={{ fontFamily:OT.serif, fontSize:16, fontWeight:700, color:OT.ink, letterSpacing:"-0.01em" }}>{p.name}</div>
                   <div style={{ display:"flex", gap:5, alignItems:"center", marginTop:2, flexWrap:"nowrap" }}>
-                    <span style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:p.team==="rizo"?OT.rizoLight:OT.brooksLight, background:p.team==="rizo"?OT.rizoTint:OT.brooksTint, padding:"1px 5px" }}>{p.team==="rizo"?"RIZO":"BROOKS"}</span>
-                    <span style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint }}>HCP {p.hcp}</span>
+                    {p.team ? (
+                      <span style={{ fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:p.team==="rizo"?OT.rizoLight:OT.brooksLight, background:p.team==="rizo"?OT.rizoTint:OT.brooksTint, padding:"1px 5px" }}>{p.team==="rizo"?"RIZO":"BROOKS"}</span>
+                    ) : (
+                      <span style={{ fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:OT.faint, background:OT.surface, padding:"1px 5px" }}>UNDRAFTED</span>
+                    )}
+                    {p.hcp > 0 && <span style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint }}>HCP {p.hcp}</span>}
                     {p.cups>0 && <span style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, color:OT.goldLight }}>★ {p.cups}×</span>}
                   </div>
                 </div>
@@ -578,7 +637,7 @@ function OScreenHistory({ D }) {
 function OScreenRules() {
   const rules = [
     { title:"Match Play Format", body:"All matches are played in match play format. Each hole is won, lost, or halved. The player or team that wins the most holes wins the match." },
-    { title:"Scoring", body:"Each match is worth up to 3 points — 1 for the front 9, 1 for the back 9, and 1 for the overall 18-hole result. The first team to 12.5 points wins the Cup." },
+    { title:"Scoring", body:"Each match is worth up to 3 points — 1 for the front 9, 1 for the back 9, and 1 for the overall 18-hole result. With 10 matches (30 total points), the first team to 15.5 points wins the Cup." },
     { title:"Concessions", body:"Putts, holes, or matches may be conceded at any time." },
     { title:"Local Rules", body:"USGA rules apply. Play the ball up in the fairway. Scramble format — 1 club length drop allowed without changing your lie." },
     { title:"Spirit of the Game", body:"Don't be a jackass. Respect your fellow competitors, the course, and the game. Any dispute should be raised immediately — tournament officials have final say. May the best team win." },
@@ -591,7 +650,7 @@ function OScreenRules() {
       </div>
       <div style={{ padding:"8px 16px 32px", display:"flex", flexDirection:"column", gap:12 }}>
         {rules.map((r, i) => (
-          <div key={i} style={{ background:OT.surface, borderRadius:6, padding:"14px 16px", borderLeft:`3px solid ${OT.gold}` }}>
+          <div key={i} style={{ background:OT.bg, border:`1px solid ${OT.rule}`, padding:"14px 16px", borderLeft:`3px solid ${OT.goldLight}` }}>
             <div style={{ fontFamily:OT.serif, fontSize:14, fontWeight:700, color:OT.ink, marginBottom:6, letterSpacing:"0.02em" }}>{r.title}</div>
             <div style={{ fontFamily:OT.sans, fontSize:12.5, color:OT.soft, lineHeight:1.6 }}>{r.body}</div>
           </div>
