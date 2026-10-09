@@ -530,7 +530,7 @@ function OScreenRankings({ D }) {
             <div key={p.name} style={{ border:`1px solid ${OT.rule}`, background:OT.bg, cursor:"pointer" }} onClick={() => setOpen(isOpen?null:p.name)}>
               <div style={{ display:"grid", gridTemplateColumns:"28px 36px 1fr auto", alignItems:"center", gap:9, padding:"11px 12px" }}>
                 <div style={{ fontFamily:OT.serif, fontSize:15, fontWeight:600, color:OT.faint, textAlign:"center" }}>
-                  {isRookie ? <span style={{ fontSize:9, fontWeight:700, letterSpacing:"0.1em", color:OT.goldLight }}>NEW</span> : i+1}
+                  {i+1}
                 </div>
                 <div style={{ width:36, height:36, borderRadius:"50%", background:teamColor, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:OT.serif, fontSize:13, fontWeight:700, color:"#fff", flexShrink:0 }}>{initials(p.name)}</div>
                 <div>
