@@ -234,7 +234,7 @@ function OScreenScoreboard({ D, onNav }) {
   const live = D.matches.filter(m => m.status==="live");
   const upcoming = D.matches.filter(m => m.status==="upcoming");
   const complete = D.matches.filter(m => m.status==="complete");
-  const r=D.team_rizo.score, b=D.team_brooks.score, target=12.5;
+  const r=D.team_rizo.score, b=D.team_brooks.score, target=15.5;
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
       {/* Crest / wordmark header */}
@@ -436,40 +436,56 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
 // ─── SCREEN: Teams ───────────────────────────────────────────────
 function OScreenTeams({ D }) {
   const initials = n => n.split(" ").map(s=>s[0]).join("").slice(0,2);
+  const isDraftPending = !D.team_rizo.roster.length && !D.team_brooks.roster.length;
+
   const RosterRow = ({ p, team }) => (
     <div style={{ display:"grid", gridTemplateColumns:"36px 1fr auto", gap:10, alignItems:"center", padding:"10px 16px", borderBottom:`1px solid ${OT.rule}` }}>
       <div style={{ width:36, height:36, borderRadius:"50%", background: team==="rizo"?OT.rizoLight:OT.brooksLight, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:OT.serif, fontSize:14, fontWeight:700, color:"#fff", flexShrink:0 }}>{initials(p.name)}</div>
       <div>
         <div style={{ fontFamily:OT.serif, fontSize:17, fontWeight:700, color:OT.ink, letterSpacing:"-0.01em" }}>{p.name}</div>
-        <div style={{ fontFamily:OT.serif, fontSize:10, fontWeight:700, letterSpacing:"0.16em", color:OT.faint, textTransform:"uppercase", marginTop:1 }}>{p.role} · HCP {p.hcp}</div>
+        <div style={{ fontFamily:OT.sans, fontSize:10, fontWeight:700, letterSpacing:"0.16em", color:OT.faint, textTransform:"uppercase", marginTop:1 }}>{p.role}{p.hcp > 0 ? ` · HCP ${p.hcp}` : ""}</div>
       </div>
-      <div style={{ display:"flex", gap:10, fontFamily:OT.mono, fontSize:11, color:OT.soft, textAlign:"right" }}>
+      <div style={{ display:"flex", gap:10, textAlign:"right" }}>
         {[{v:p.w,l:"W"},{v:p.l,l:"L"},{v:p.h,l:"H"}].map(s => (
           <div key={s.l}>
             <div style={{ fontFamily:OT.serif, fontSize:18, fontWeight:700, color:OT.ink, display:"block", textAlign:"center" }}>{s.v}</div>
-            <div style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:OT.faint, textAlign:"center" }}>{s.l}</div>
+            <div style={{ fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:OT.faint, textAlign:"center" }}>{s.l}</div>
           </div>
         ))}
       </div>
     </div>
   );
+
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
       <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", padding:"14px 16px", alignItems:"center", borderBottom:`1px solid ${OT.rule}` }}>
         <div>
           <div style={{ fontFamily:OT.serif, fontSize:12, fontWeight:700, letterSpacing:"0.2em", color:OT.rizoLight, textTransform:"uppercase" }}>Team Rizo</div>
-          <div style={{ fontFamily:OT.serif, fontSize:13, fontWeight:600, color:OT.soft, marginTop:2, letterSpacing:"0.06em" }}>Capt. {D.team_rizo.captain}</div>
+          <div style={{ fontFamily:OT.sans, fontSize:12, fontWeight:600, color:OT.soft, marginTop:2 }}>Capt. {D.team_rizo.captain}</div>
         </div>
-        <div style={{ fontFamily:OT.serif, fontSize:20, color:OT.gold, padding:"0 10px" }}>vs</div>
+        <div style={{ fontFamily:OT.serif, fontSize:20, fontStyle:"italic", color:OT.gold, padding:"0 10px" }}>vs</div>
         <div style={{ textAlign:"right" }}>
           <div style={{ fontFamily:OT.serif, fontSize:12, fontWeight:700, letterSpacing:"0.2em", color:OT.brooksLight, textTransform:"uppercase" }}>Team Brooks</div>
-          <div style={{ fontFamily:OT.serif, fontSize:13, fontWeight:600, color:OT.soft, marginTop:2, letterSpacing:"0.06em" }}>Capt. {D.team_brooks.captain}</div>
+          <div style={{ fontFamily:OT.sans, fontSize:12, fontWeight:600, color:OT.soft, marginTop:2 }}>Capt. {D.team_brooks.captain}</div>
         </div>
       </div>
-      <OSectionHead>Team Rizo</OSectionHead>
-      {D.team_rizo.roster.map(p => <RosterRow key={p.name} p={p} team="rizo" />)}
-      <OSectionHead>Team Brooks</OSectionHead>
-      {D.team_brooks.roster.map(p => <RosterRow key={p.name} p={p} team="brooks" />)}
+
+      {isDraftPending ? (
+        <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"60px 32px", gap:16 }}>
+          <div style={{ fontFamily:OT.serif, fontSize:32, color:OT.ruleStrong, textAlign:"center" }}>⚑</div>
+          <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.ink, textAlign:"center" }}>Draft Pending</div>
+          <div style={{ fontFamily:OT.sans, fontSize:13, color:OT.faint, textAlign:"center", lineHeight:1.6 }}>
+            Team rosters will appear here once the draft is complete. Check Rankings to see all 40 players.
+          </div>
+        </div>
+      ) : (
+        <>
+          <OSectionHead>Team Rizo</OSectionHead>
+          {D.team_rizo.roster.map(p => <RosterRow key={p.name} p={p} team="rizo" />)}
+          <OSectionHead>Team Brooks</OSectionHead>
+          {D.team_brooks.roster.map(p => <RosterRow key={p.name} p={p} team="brooks" />)}
+        </>
+      )}
       <div style={{ height:24 }}></div>
     </div>
   );
@@ -479,10 +495,17 @@ function OScreenTeams({ D }) {
 function OScreenRankings({ D }) {
   const [open, setOpen] = React.useState(null);
   const initials = n => n.split(" ").map(s=>s[0]).join("").slice(0,2);
-  const players = [
-    ...D.team_rizo.roster.map(p=>({...p,team:"rizo"})),
-    ...D.team_brooks.roster.map(p=>({...p,team:"brooks"})),
-  ].map(p => {
+
+  // Use undrafted pool if teams aren't set yet, otherwise merge rosters
+  const isDraftPending = D.undrafted && D.undrafted.length > 0;
+  const rawPlayers = isDraftPending
+    ? D.undrafted.map(p => ({...p, team: null}))
+    : [
+        ...D.team_rizo.roster.map(p=>({...p,team:"rizo"})),
+        ...D.team_brooks.roster.map(p=>({...p,team:"brooks"})),
+      ];
+
+  const players = rawPlayers.map(p => {
     const played=p.w+p.l+p.h, pts=p.w+p.h*0.5, pct=played>0?pts/played:0;
     return {...p,played,pts,pct};
   }).sort((a,b) => {
@@ -497,8 +520,8 @@ function OScreenRankings({ D }) {
       </div>
       <div style={{ display:"flex", flexDirection:"column", gap:8, padding:"0 16px 24px" }}>
         {players.map((p,i) => {
-          const isOpen=open===p.name, isRookie=p.played===0;
-          const teamColor=p.team==="rizo"?OT.rizoLight:OT.brooksLight;
+          const isOpen=open===p.name, isRookie=p.appearances===0;
+          const teamColor = p.team==="rizo" ? OT.rizoLight : p.team==="brooks" ? OT.brooksLight : OT.ink;
           return (
             <div key={p.name} style={{ border:`1px solid ${OT.rule}`, background:OT.bg, cursor:"pointer" }} onClick={() => setOpen(isOpen?null:p.name)}>
               <div style={{ display:"grid", gridTemplateColumns:"28px 36px 1fr auto", alignItems:"center", gap:9, padding:"11px 12px" }}>
@@ -509,8 +532,12 @@ function OScreenRankings({ D }) {
                 <div>
                   <div style={{ fontFamily:OT.serif, fontSize:16, fontWeight:700, color:OT.ink, letterSpacing:"-0.01em" }}>{p.name}</div>
                   <div style={{ display:"flex", gap:5, alignItems:"center", marginTop:2, flexWrap:"nowrap" }}>
-                    <span style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:p.team==="rizo"?OT.rizoLight:OT.brooksLight, background:p.team==="rizo"?OT.rizoTint:OT.brooksTint, padding:"1px 5px" }}>{p.team==="rizo"?"RIZO":"BROOKS"}</span>
-                    <span style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint }}>HCP {p.hcp}</span>
+                    {p.team ? (
+                      <span style={{ fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:p.team==="rizo"?OT.rizoLight:OT.brooksLight, background:p.team==="rizo"?OT.rizoTint:OT.brooksTint, padding:"1px 5px" }}>{p.team==="rizo"?"RIZO":"BROOKS"}</span>
+                    ) : (
+                      <span style={{ fontFamily:OT.sans, fontSize:9, fontWeight:700, letterSpacing:"0.14em", color:OT.faint, background:OT.surface, padding:"1px 5px" }}>UNDRAFTED</span>
+                    )}
+                    {p.hcp > 0 && <span style={{ fontFamily:OT.mono, fontSize:9, color:OT.faint }}>HCP {p.hcp}</span>}
                     {p.cups>0 && <span style={{ fontFamily:OT.serif, fontSize:9, fontWeight:700, color:OT.goldLight }}>★ {p.cups}×</span>}
                   </div>
                 </div>
@@ -610,7 +637,7 @@ function OScreenHistory({ D }) {
 function OScreenRules() {
   const rules = [
     { title:"Match Play Format", body:"All matches are played in match play format. Each hole is won, lost, or halved. The player or team that wins the most holes wins the match." },
-    { title:"Scoring", body:"Each match is worth up to 3 points — 1 for the front 9, 1 for the back 9, and 1 for the overall 18-hole result. The first team to 12.5 points wins the Cup." },
+    { title:"Scoring", body:"Each match is worth up to 3 points — 1 for the front 9, 1 for the back 9, and 1 for the overall 18-hole result. With 10 matches (30 total points), the first team to 15.5 points wins the Cup." },
     { title:"Concessions", body:"Putts, holes, or matches may be conceded at any time." },
     { title:"Local Rules", body:"USGA rules apply. Play the ball up in the fairway. Scramble format — 1 club length drop allowed without changing your lie." },
     { title:"Spirit of the Game", body:"Don't be a jackass. Respect your fellow competitors, the course, and the game. Any dispute should be raised immediately — tournament officials have final say. May the best team win." },
