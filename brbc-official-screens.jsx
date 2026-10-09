@@ -316,9 +316,13 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
 
   const [holes, setHoles] = React.useState(() => buildHoles(live.holes[m.id]));
 
-  React.useEffect(() => {
-    setHoles(buildHoles(live.holes[m.id]));
-  }, [live.holes[m.id], m.id]);
+  // Intentionally no useEffect syncing live.holes → holes here.
+  // Syncing back from Firebase caused visual re-fills: intermediate Firebase
+  // "value" events (fired per-hole during a multi-hole clear) would overwrite
+  // the user's local cleared state before all removes had propagated.
+  // The useState initializer captures the current Firebase state on mount;
+  // key={selectedMatch} in App ensures a fresh mount (and fresh read) whenever
+  // the user navigates away and back to any match.
 
   const setHole = (n, v) => {
     setHoles(prev => {
