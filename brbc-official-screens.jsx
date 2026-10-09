@@ -559,7 +559,7 @@ function OScreenRankings({ D }) {
               {isOpen && (
                 <div style={{ borderTop:`1px solid ${OT.rule}`, padding:"12px", background:OT.surface }}>
                   <div style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", border:`1px solid ${OT.rule}`, marginBottom:10, background:OT.bg }}>
-                    {[{l:"Played",v:p.played||"—"},{l:"Wins",v:p.w||"—"},{l:"Losses",v:p.l||"—"},{l:"Halved",v:p.h||"—"},{l:"Cups",v:p.cups||"—"},{l:"HCP",v:p.hcp.toFixed(1)}].map((s,idx) => (
+                    {[{l:"Played",v:p.played||"—"},{l:"Wins",v:p.w||"—"},{l:"Losses",v:p.l||"—"},{l:"Halved",v:p.h||"—"},{l:"Cups",v:p.cups||"—"},{l:"HCP",v:p.hcp!=null?p.hcp.toFixed(1):"—"}].map((s,idx) => (
                       <div key={s.l} style={{ padding:"7px 4px", textAlign:"center", borderRight:idx<5?`1px solid ${OT.rule}`:"none" }}>
                         <div style={{ fontFamily:OT.serif, fontSize:15, fontWeight:700, color:OT.ink }}>{s.v}</div>
                         <div style={{ fontFamily:OT.serif, fontSize:8, fontWeight:700, letterSpacing:"0.14em", color:OT.faint, textTransform:"uppercase", marginTop:2 }}>{s.l}</div>
