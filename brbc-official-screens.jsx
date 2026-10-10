@@ -240,7 +240,7 @@ function OScreenScoreboard({ D, onNav }) {
       {/* Score header — Rizo | Logo | Brooks */}
       <div style={{ background:OT.bg, borderBottom:`1px solid ${OT.rule}`, padding:"14px 16px 12px" }}>
         <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", gap:8 }}>
-          <div style={{ textAlign:"left" }}>
+          <div style={{ textAlign:"center" }}>
             <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.rizoLight, lineHeight:1, marginBottom:4, letterSpacing:"0.06em", textTransform:"uppercase" }}>Rizo</div>
             <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo, fontVariantNumeric:"lining-nums tabular-nums" }}>{r}</div>
             <div style={{ fontFamily:OT.mono, fontSize:8, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
@@ -249,7 +249,7 @@ function OScreenScoreboard({ D, onNav }) {
             <img src="assets/ryder-cup-logo.png" alt="BRBC" style={{ width:100, height:"auto", display:"block", margin:"0 auto", mixBlendMode:"multiply" }} />
             <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.14em", color:OT.gold, textTransform:"uppercase", marginTop:4 }}>{target} to win</div>
           </div>
-          <div style={{ textAlign:"right" }}>
+          <div style={{ textAlign:"center" }}>
             <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.brooksLight, lineHeight:1, marginBottom:4, letterSpacing:"0.06em", textTransform:"uppercase" }}>Brooks</div>
             <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks, fontVariantNumeric:"lining-nums tabular-nums" }}>{b}</div>
             <div style={{ fontFamily:OT.mono, fontSize:8, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_brooks.projected.toFixed(1)}</div>
