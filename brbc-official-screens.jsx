@@ -242,7 +242,7 @@ function OScreenScoreboard({ D, onNav }) {
         <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", gap:8 }}>
           <div style={{ textAlign:"left" }}>
             <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.rizoLight, lineHeight:1, marginBottom:4 }}>Rizo</div>
-            <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo }}>{r}</div>
+            <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo, fontVariantNumeric:"lining-nums tabular-nums" }}>{r}</div>
             <div style={{ fontFamily:OT.mono, fontSize:8, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
           </div>
           <div style={{ textAlign:"center" }}>
@@ -251,7 +251,7 @@ function OScreenScoreboard({ D, onNav }) {
           </div>
           <div style={{ textAlign:"right" }}>
             <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.brooksLight, lineHeight:1, marginBottom:4 }}>Brooks</div>
-            <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks }}>{b}</div>
+            <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks, fontVariantNumeric:"lining-nums tabular-nums" }}>{b}</div>
             <div style={{ fontFamily:OT.mono, fontSize:8, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_brooks.projected.toFixed(1)}</div>
           </div>
         </div>
@@ -572,7 +572,7 @@ function OScreenHistory({ D }) {
       <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", margin:"16px 16px 4px", borderTop:`1px solid ${OT.rule}`, borderBottom:`1px solid ${OT.rule}`, padding:"14px 12px" }}>
         <div style={{ textAlign:"center" }}>
           <div style={{ fontFamily:OT.serif, fontSize:12, fontWeight:700, letterSpacing:"0.18em", color:OT.rizoLight, textTransform:"uppercase" }}>Rizo</div>
-          <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.9, color:OT.rizo }}>{rizoW}</div>
+          <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.9, color:OT.rizo, fontVariantNumeric:"lining-nums tabular-nums" }}>{rizoW}</div>
         </div>
         <div style={{ textAlign:"center", padding:"0 12px" }}>
           <div style={{ fontFamily:OT.serif, fontSize:10, fontWeight:700, letterSpacing:"0.2em", color:OT.faint, textTransform:"uppercase", marginBottom:4 }}>All-Time</div>
@@ -583,7 +583,7 @@ function OScreenHistory({ D }) {
         </div>
         <div style={{ textAlign:"center" }}>
           <div style={{ fontFamily:OT.serif, fontSize:12, fontWeight:700, letterSpacing:"0.18em", color:OT.brooksLight, textTransform:"uppercase" }}>Brooks</div>
-          <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.9, color:OT.brooks }}>{brooksW}</div>
+          <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.9, color:OT.brooks, fontVariantNumeric:"lining-nums tabular-nums" }}>{brooksW}</div>
         </div>
       </div>
       <OSectionHead>Past Champions</OSectionHead>
