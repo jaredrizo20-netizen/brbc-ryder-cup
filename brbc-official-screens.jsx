@@ -19,9 +19,9 @@ const OT = {
   gold:        "#9A7220",
   goldLight:   "#BF9128",
   live:        "#16A34A",
-  serif: "'Playfair Display',Georgia,serif",
-  sans:  "Inter,system-ui,sans-serif",
-  mono:  "'JetBrains Mono',ui-monospace,monospace",
+  serif: "'DM Serif Display',Georgia,serif",
+  sans:  "'DM Sans',system-ui,sans-serif",
+  mono:  "'DM Mono',ui-monospace,monospace",
 };
 
 // Renders a score like "5&4" with the & in a plain sans-serif font
@@ -241,7 +241,7 @@ function OScreenScoreboard({ D, onNav }) {
       <div style={{ background:OT.bg, borderBottom:`1px solid ${OT.rule}`, padding:"14px 16px 12px" }}>
         <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center", gap:8 }}>
           <div style={{ textAlign:"left" }}>
-            <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.rizoLight, lineHeight:1, marginBottom:4 }}>Rizo</div>
+            <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.rizoLight, lineHeight:1, marginBottom:4, letterSpacing:"0.06em", textTransform:"uppercase" }}>Rizo</div>
             <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.rizo, fontVariantNumeric:"lining-nums tabular-nums" }}>{r}</div>
             <div style={{ fontFamily:OT.mono, fontSize:8, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_rizo.projected.toFixed(1)}</div>
           </div>
@@ -250,7 +250,7 @@ function OScreenScoreboard({ D, onNav }) {
             <div style={{ fontFamily:OT.sans, fontSize:8, fontWeight:600, letterSpacing:"0.14em", color:OT.gold, textTransform:"uppercase", marginTop:4 }}>{target} to win</div>
           </div>
           <div style={{ textAlign:"right" }}>
-            <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.brooksLight, lineHeight:1, marginBottom:4 }}>Brooks</div>
+            <div style={{ fontFamily:OT.serif, fontSize:20, fontWeight:700, color:OT.brooksLight, lineHeight:1, marginBottom:4, letterSpacing:"0.06em", textTransform:"uppercase" }}>Brooks</div>
             <div style={{ fontFamily:OT.serif, fontSize:52, fontWeight:700, lineHeight:0.85, letterSpacing:"-0.03em", color:OT.brooks, fontVariantNumeric:"lining-nums tabular-nums" }}>{b}</div>
             <div style={{ fontFamily:OT.mono, fontSize:8, color:OT.faint, marginTop:5, letterSpacing:"0.08em" }}>PROJ {D.team_brooks.projected.toFixed(1)}</div>
           </div>
