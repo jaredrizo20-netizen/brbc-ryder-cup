@@ -1,5 +1,26 @@
 // ── BRBC TOURNAMENT DATA ──
 
+const BRBC_HOLES = [
+  {n:1,  par:4, dist:335},
+  {n:2,  par:4, dist:335},
+  {n:3,  par:3, dist:171},
+  {n:4,  par:4, dist:302},
+  {n:5,  par:3, dist:165},
+  {n:6,  par:5, dist:494},
+  {n:7,  par:4, dist:383},
+  {n:8,  par:5, dist:500},
+  {n:9,  par:4, dist:364},
+  {n:10, par:5, dist:481},
+  {n:11, par:4, dist:408},
+  {n:12, par:3, dist:172},
+  {n:13, par:5, dist:465},
+  {n:14, par:4, dist:411},
+  {n:15, par:4, dist:391},
+  {n:16, par:3, dist:174},
+  {n:17, par:4, dist:347},
+  {n:18, par:4, dist:314},
+];
+
 window.BRBC_DATA = {
   edition: "III",
   year: 2026,
@@ -9,16 +30,16 @@ window.BRBC_DATA = {
 
   // 10 matches × 3 pts each = 30 pts total; 15.5 to win
   matches: [
-    { id:"m1",  time:"8:30 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m2",  time:"8:40 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m3",  time:"8:50 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m4",  time:"9:00 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m5",  time:"9:10 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m6",  time:"9:20 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m7",  time:"9:30 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m8",  time:"9:40 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m9",  time:"9:50 AM",  tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m10", time:"10:00 AM", tee:1, thru:0, status:"upcoming", rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m1",  time:"8:30 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m2",  time:"8:40 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m3",  time:"8:50 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m4",  time:"9:00 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m5",  time:"9:10 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m6",  time:"9:20 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m7",  time:"9:30 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m8",  time:"9:40 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m9",  time:"9:50 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m10", time:"10:00 AM", tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
   ],
 
   team_rizo: {
