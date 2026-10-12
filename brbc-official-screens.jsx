@@ -627,8 +627,15 @@ function OScreenRules() {
   const rules = [
     { title:"Match Play Format", body:"All matches are played in match play format. Each hole is won, lost, or halved. The player or team that wins the most holes wins the match." },
     { title:"Scoring", body:"Each match is worth up to 3 points — 1 for the front 9, 1 for the back 9, and 1 for the overall 18-hole result. With 10 matches (30 total points), the first team to 15.5 points wins the Cup." },
+    { title:"Mulligans", body:"Each player receives 2 shotgun mulligans — 1 per 9 holes. Putts may be mulligan'd. Drink before re-hitting. Video evidence required." },
+    { title:"Eagle Rule", body:"Make an eagle and you earn the right to send a shotgun to any player on the opposing team. They must drink immediately. Video evidence required." },
+    { title:"Hole 2 — Water Hazard", body:"Any ball that finds the water on Hole 2 earns you a shotgun. No exceptions. Drink up." },
+    { title:"Hole 5 — Closest to the Pin", body:"Par 3 · 165 yards. Closest to the pin wins a prize. Measured from the cup." },
+    { title:"Hole 11 — Bogey Shotgun", body:"Make a bogey on Hole 11 and you're taking a shotgun. Par 4 · 408 yards. Play smart." },
+    { title:"Hole 13 — Long Drive", body:"Par 5 · 465 yards. Longest drive in the fairway wins. Open to all players in all matches." },
+    { title:"Hole 16 — Closest to the Pin", body:"Par 3 · 174 yards. Second CTP of the day. Closest to the cup wins." },
     { title:"Concessions", body:"Putts, holes, or matches may be conceded at any time." },
-    { title:"Local Rules", body:"USGA rules apply. Play the ball up in the fairway. Scramble format — 1 club length drop allowed without changing your lie." },
+    { title:"Local Rules", body:"USGA rules apply. Play the ball up in the fairway. 1 club length drop allowed without changing your lie." },
     { title:"Spirit of the Game", body:"Don't be a jackass. Respect your fellow competitors, the course, and the game. Any dispute should be raised immediately — tournament officials have final say. May the best team win." },
   ];
   return (
