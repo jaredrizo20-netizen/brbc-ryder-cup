@@ -202,12 +202,12 @@ function OMatchCard({ m, onTap }) {
           ))}
         </div>
       )}
-      {m.holes && m.holes.length > 0 && (
+      {m.playedHoles && m.playedHoles.length > 0 && (
         <div style={{ display:"grid", gridTemplateColumns:"repeat(9,1fr) 6px repeat(9,1fr)", gap:2, padding:"7px 12px", borderTop:`1px solid ${OT.rule}`, alignItems:"center" }}>
           {Array.from({length:19}).map((_,i) => {
             if (i===9) return <div key="div" style={{ width:1, height:8, background:OT.ruleStrong, margin:"0 auto" }}></div>;
             const n = i < 9 ? i+1 : i;
-            const h = m.holes.find(x => x.n===n);
+            const h = m.playedHoles.find(x => x.n===n);
             const bg = !h ? OT.rule : h.win===1 ? OT.rizoLight : h.win===-1 ? OT.brooksLight : "#C9A84C";
             return <div key={i} style={{ height:4, borderRadius:1, background:bg, opacity: h ? 1 : 0.3 }}></div>;
           })}
@@ -294,7 +294,7 @@ function OScreenMatchDetail({ D, matchId, onBack }) {
         map[k] = result === "rizo" ? "r" : result === "brooks" ? "b" : result === "halved" ? "h" : null;
       });
     } else {
-      (m.holes||[]).forEach(h => { map[h.n] = h.win===1 ? "r" : h.win===-1 ? "b" : h.win===0 ? "h" : null; });
+      (m.playedHoles||[]).forEach(h => { map[h.n] = h.win===1 ? "r" : h.win===-1 ? "b" : h.win===0 ? "h" : null; });
     }
     return map;
   }, [m.id]);
