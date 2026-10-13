@@ -114,7 +114,7 @@ window.BRBC_DATA = {
   hall_of_champions: [
     { year: 2025, edition: "II", winner: "Rizo", score: "16 – 8",
       photo: "assets/champ-2025.jpg",
-      roster: ["Jared Rizo","Keane Costa","Cam Hooper","Tim Flynn","Billy Gardner","Andrew Dion","Nick Radcliffe","Kevin Hock","Jeff Demers","John Tomlin","Chris Flaherty","Andrew Nazarro","Mike Rizzo","Lic","Reed Pike","Jay Stasiak"] },
+      roster: ["Jared Rizo","Lic","Reed Pike","Kyle Devin","Billy Gardner","John Tomlin","Chris Flaherty","Alex Ray","Jay Stasiak","Jake Harris","Jeff Demers","Cam Hooper","Jack Wilson","Tim Flynn"] },
     { year: 2024, edition: "I", winner: "Brooks", score: "18.5 – 5.5",
       photo: "assets/champ-2024.jpg",
       roster: ["Sean Brooks","Mike Preziosi","Jake Harris","Mark Prezioisi","Kevin O'Halloran","Sean Williamson","Jack Wilson","Kyle Devin","Lic","Reed Pike","Jay Stasiak","Cam Hooper","Tim Flynn","Lou","Bobby Lawton","Joe Hock"] },
