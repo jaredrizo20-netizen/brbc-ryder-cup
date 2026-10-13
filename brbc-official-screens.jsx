@@ -632,7 +632,7 @@ function OScreenRules() {
   const rules = [
     { title:"Match Play Format", body:"All matches are played in match play format. Each hole is won, lost, or halved. The player or team that wins the most holes wins the match." },
     { title:"Scoring", body:"Each match is worth up to 3 points — 1 for the front 9, 1 for the back 9, and 1 for the overall 18-hole result. With 10 matches (30 total points), the first team to 15.5 points wins the Cup." },
-    { title:"Mulligans", body:"Each player receives 1 shotgun mulligan for the full 18 holes. Putts may be mulligan'd. Drink before re-hitting. Video evidence required." },
+    { title:"Mulligans", body:"Each player receives 1 shotgun mulligan for the full 18 holes. Putts may be mulligan'd. Drink before re-hitting." },
     { title:"Eagle Rule", body:"Make an eagle and you earn the right to send a shotgun to any player on the opposing team. They must drink immediately. Video evidence required." },
     { title:"Hole 2 — Water Hazard", body:"Any ball that finds the water on Hole 2 earns you a shotgun. No exceptions. Drink up." },
     { title:"Hole 5 — Closest to the Pin", body:"Par 3 · 165 yards. Closest to the pin wins a prize. Measured from the cup." },
