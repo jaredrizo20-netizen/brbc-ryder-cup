@@ -494,14 +494,19 @@ function OScreenRankings({ D }) {
         ...D.team_brooks.roster.map(p=>({...p,team:"brooks"})),
       ];
 
-  const players = rawPlayers.map(p => {
-    const played=p.w+p.l+p.h, pts=p.w+p.h*0.5, pct=played>0?pts/played:0;
-    return {...p,played,pts,pct};
-  }).sort((a,b) => {
-    if(a.played===0&&b.played>0)return 1;
-    if(b.played===0&&a.played>0)return -1;
-    return b.pct-a.pct||b.pts-a.pts;
-  });
+  const players = rawPlayers
+    .filter(p => isDraftPending || p.rank != null)
+    .map(p => {
+      const played=p.w+p.l+p.h, pts=p.w+p.h*0.5, pct=played>0?pts/played:0;
+      return {...p,played,pts,pct};
+    }).sort((a,b) => {
+      // After draft: sort by assigned rank
+      if(a.rank != null && b.rank != null) return a.rank - b.rank;
+      // Pre-draft fallback: win percentage
+      if(a.played===0&&b.played>0)return 1;
+      if(b.played===0&&a.played>0)return -1;
+      return b.pct-a.pct||b.pts-a.pts;
+    });
   return (
     <div style={{ flex:1, overflowY:"auto" }}>
       <div style={{ padding:"14px 16px 10px" }}>
