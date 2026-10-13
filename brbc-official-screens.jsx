@@ -498,6 +498,11 @@ function OScreenRankings({ D }) {
     const played=p.w+p.l+p.h, pts=p.w+p.h*0.5, pct=played>0?pts/played:0;
     return {...p,played,pts,pct};
   }).sort((a,b) => {
+    // After draft: sort by assigned rank (captains with no rank go last)
+    const aRank = a.rank ?? Infinity;
+    const bRank = b.rank ?? Infinity;
+    if(aRank !== bRank) return aRank - bRank;
+    // Pre-draft fallback: win percentage
     if(a.played===0&&b.played>0)return 1;
     if(b.played===0&&a.played>0)return -1;
     return b.pct-a.pct||b.pts-a.pts;
