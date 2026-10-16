@@ -30,16 +30,16 @@ window.BRBC_DATA = {
 
   // 10 matches × 3 pts each = 30 pts total; 15.5 to win
   matches: [
-    { id:"m1",  time:"8:30 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m2",  time:"8:40 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m3",  time:"8:50 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m4",  time:"9:00 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m5",  time:"9:10 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m6",  time:"9:20 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m7",  time:"9:30 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m8",  time:"9:40 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m9",  time:"9:50 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
-    { id:"m10", time:"10:00 AM", tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["TBD","TBD"],score:0}, brooks:{players:["TBD","TBD"],score:0}, lead:null, lead_amt:0 },
+    { id:"m1",  time:"8:30 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Lebbo","Andrew Dion"],score:0},         brooks:{players:["Keane Costa","Bobby Lawton"],score:0},      lead:null, lead_amt:0 },
+    { id:"m2",  time:"8:40 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Mark Prezioisi","Tim Flynn"],score:0},    brooks:{players:["Kevin Lawton","Marc Stokes"],score:0},      lead:null, lead_amt:0 },
+    { id:"m3",  time:"8:50 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Shane Fries","Zack Fries"],score:0},      brooks:{players:["Kyle Devin","Mike Preziosi"],score:0},      lead:null, lead_amt:0 },
+    { id:"m4",  time:"9:00 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Joe Hock","David Fasano"],score:0},       brooks:{players:["Steve Wakelin","Pat Ellis"],score:0},       lead:null, lead_amt:0 },
+    { id:"m5",  time:"9:10 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Jared Rizo","Cam Hooper"],score:0},       brooks:{players:["Jack Wilson","Brian Skelly"],score:0},      lead:null, lead_amt:0 },
+    { id:"m6",  time:"9:20 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Cade Buckley","John Tomlin"],score:0},    brooks:{players:["Sean Brooks","Andrew Nazarro"],score:0},    lead:null, lead_amt:0 },
+    { id:"m7",  time:"9:30 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Sean Williamson","Mike Rizzo"],score:0},  brooks:{players:["Jeff Demers","Big Bob Lawton"],score:0},    lead:null, lead_amt:0 },
+    { id:"m8",  time:"9:40 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Lou","Joe Bina"],score:0},                brooks:{players:["Adam Boari","Nick Ciuffo"],score:0},        lead:null, lead_amt:0 },
+    { id:"m9",  time:"9:50 AM",  tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Alex Ray","Jay Stasiak"],score:0},        brooks:{players:["Bobby Devin","Steven Santangelo"],score:0}, lead:null, lead_amt:0 },
+    { id:"m10", time:"10:00 AM", tee:1, thru:0, status:"upcoming", holes:BRBC_HOLES, rizo:{players:["Billy Gardner","David Judge"],score:0},   brooks:{players:["Matt Gardner","Kevin O'Halloran"],score:0}, lead:null, lead_amt:0 },
   ],
 
   team_rizo: {
@@ -100,7 +100,7 @@ window.BRBC_DATA = {
       { name:"Kevin O'Halloran", rank:24, hcp:null,  w:2, l:3, h:1, cups:1, appearances:2, bio:"At this point everyone (kind of) knows what you are getting with Kevin. Erratic, long hitter, probably 3 different drivers in the bag and some of the best shots of the day. In between it all is a whole lot of question marks, and that is why he has a damn near .500 record across 2 appearances." },
       { name:"Adam Boari",       rank:26, hcp:13.0,  w:0, l:0, h:0, cups:0, appearances:0, bio:"Adam is making his second BRBC appearance. A fellow lefty, and a guy who will grind for his squad." },
       { name:"Pat Ellis",        rank:28, hcp:null,  w:0, l:0, h:0, cups:0, appearances:0, bio:"Patsy Par 3's — one of the OGs of the BRBC — is making his Ryder Cup debut. He's always been one of if not the most competitive people in this entire group, BUT he also doesn't get out much. Can he keep it together for 18 holes to produce a few points for his team? Time shall tell." },
-      { name:"Nick Radcliffe",   rank:30, hcp:12.9,  w:3, l:0, h:0, cups:1, appearances:1, bio:"I had to double check the handicaps when I saw Rad at a 12.9 — talk about a glow-up! We all know about Rad's athletic ability but what you are going to get the morning of the tournament really is a mystery. How drunk / hungover will he be, will he sleep through his alarm, will he ride a zamboni to the course. No one knows." },
+      { name:"Steven Santangelo", rank:30, hcp:null,  w:0, l:0, h:0, cups:0, appearances:0, bio:"Steven is stepping in as Nick Radcliffe's fill-in for this year's cup. Rumor has it he may or may not be banned from the Harp, and has a well-documented affinity for clubs in Nashville. Making his Ryder Cup debut — all bets are off." },
       { name:"Andrew Nazarro",   rank:32, hcp:null,  w:0, l:3, h:0, cups:1, appearances:1, bio:"You can't mention the BRBC and not have a funny Naz story. A pioneer of the tournament — it's his Super Bowl. He has moments where he can play up to the mid-level of this tournament and others where he's just about bottom. Some coaching and some liquid luck can swing this one way or the other." },
       { name:"Mike Preziosi",    rank:34, hcp:null,  w:4, l:2, h:0, cups:1, appearances:2, bio:"Mikey P will always punch above his weight class. The Preziosi boys always bring it in the BRBC no matter where they are ranked. In match play — Texas Wedge, 150-yard Hybrids and 175-yard drivers just play. Minimizing mistakes and making your opponents beat themselves is his game." },
       { name:"Big Bob Lawton",   rank:36, hcp:22.6,  w:0, l:2, h:1, cups:0, appearances:1, bio:"Big Bob is searching for his first Ryder Cup win. Couple of runner-up finishes in the 4-man — he might be due. One of the best scramble putters in the field." },
